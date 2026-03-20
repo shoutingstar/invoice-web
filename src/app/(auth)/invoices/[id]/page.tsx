@@ -28,7 +28,7 @@ export default async function InvoiceDetailPage({
       {/* 목록으로 돌아가기 링크 */}
       <div className="mb-6">
         <Link href={ROUTES.INVOICES}>
-          <Button variant="ghost" size="sm" className="gap-2 -ml-2">
+          <Button variant="ghost" size="sm" className="-ml-2 gap-2">
             <ArrowLeft className="h-4 w-4" />
             견적서 목록으로
           </Button>
@@ -36,7 +36,7 @@ export default async function InvoiceDetailPage({
       </div>
 
       {/* 페이지 헤더 및 PDF 다운로드 버튼 */}
-      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-8">
+      <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
         <h1 className="text-3xl font-bold">{invoice.invoiceNumber}</h1>
         {/* PDF 다운로드 버튼 (Phase 3에서 기능 구현) */}
         <Button className="gap-2 sm:self-start" disabled>

@@ -20,12 +20,13 @@ export default function InvoicesError({ error, reset }: InvoicesErrorProps) {
   return (
     <Container className="py-16">
       <div className="flex min-h-96 flex-col items-center justify-center rounded-lg border border-dashed py-12">
-        <div className="mb-4 text-muted-foreground">
+        <div className="text-muted-foreground mb-4">
           <AlertCircle className="h-12 w-12" />
         </div>
         <h3 className="mb-2 text-lg font-semibold">오류가 발생했습니다</h3>
-        <p className="mb-6 max-w-sm text-center text-sm text-muted-foreground">
-          견적서 목록을 불러오는 중에 오류가 발생했습니다. 다시 시도하거나 대시보드로 돌아가세요.
+        <p className="text-muted-foreground mb-6 max-w-sm text-center text-sm">
+          견적서 목록을 불러오는 중에 오류가 발생했습니다. 다시 시도하거나
+          대시보드로 돌아가세요.
         </p>
         <div className="flex gap-3">
           <Button variant="outline" onClick={() => reset()}>

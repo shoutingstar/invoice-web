@@ -11,9 +11,9 @@ export default function InvoiceDetailLoading() {
       </div>
 
       {/* 페이지 헤더 스켈레톤 */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <div className="flex items-center gap-3 mb-1">
+          <div className="mb-1 flex items-center gap-3">
             <Skeleton className="h-8 w-40" />
             <Skeleton className="h-5 w-16 rounded-full" />
           </div>
@@ -28,10 +28,10 @@ export default function InvoiceDetailLoading() {
           <Skeleton className="h-5 w-24" />
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {[1, 2, 3, 4, 5, 6].map(i => (
               <div key={i}>
-                <Skeleton className="h-4 w-16 mb-1" />
+                <Skeleton className="mb-1 h-4 w-16" />
                 <Skeleton className="h-5 w-32" />
               </div>
             ))}
@@ -47,20 +47,20 @@ export default function InvoiceDetailLoading() {
         <CardContent className="p-0">
           <div className="px-6 pb-6">
             {/* 헤더 행 */}
-            <div className="flex gap-4 py-3 border-b mb-2">
+            <div className="mb-2 flex gap-4 border-b py-3">
               <Skeleton className="h-4 w-24" />
-              <Skeleton className="h-4 flex-1 hidden sm:block" />
+              <Skeleton className="hidden h-4 flex-1 sm:block" />
               <Skeleton className="h-4 w-10" />
-              <Skeleton className="h-4 w-20 hidden sm:block" />
+              <Skeleton className="hidden h-4 w-20 sm:block" />
               <Skeleton className="h-4 w-24" />
             </div>
             {/* 항목 행 5개 */}
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="flex gap-4 py-3 border-b last:border-0">
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className="flex gap-4 border-b py-3 last:border-0">
                 <Skeleton className="h-4 w-28" />
-                <Skeleton className="h-4 flex-1 hidden sm:block" />
+                <Skeleton className="hidden h-4 flex-1 sm:block" />
                 <Skeleton className="h-4 w-6" />
-                <Skeleton className="h-4 w-24 hidden sm:block" />
+                <Skeleton className="hidden h-4 w-24 sm:block" />
                 <Skeleton className="h-4 w-24" />
               </div>
             ))}
@@ -71,7 +71,7 @@ export default function InvoiceDetailLoading() {
       {/* 합계 섹션 스켈레톤 */}
       <Card className="mb-6">
         <CardContent className="pt-6">
-          <div className="space-y-3 max-w-sm ml-auto">
+          <div className="ml-auto max-w-sm space-y-3">
             <div className="flex justify-between">
               <Skeleton className="h-4 w-20" />
               <Skeleton className="h-4 w-24" />
@@ -80,7 +80,7 @@ export default function InvoiceDetailLoading() {
               <Skeleton className="h-4 w-24" />
               <Skeleton className="h-4 w-20" />
             </div>
-            <div className="border-t pt-3 flex justify-between">
+            <div className="flex justify-between border-t pt-3">
               <Skeleton className="h-5 w-12" />
               <Skeleton className="h-5 w-28" />
             </div>
@@ -94,10 +94,10 @@ export default function InvoiceDetailLoading() {
           <Skeleton className="h-5 w-28" />
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[1, 2, 3, 4].map((i) => (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {[1, 2, 3, 4].map(i => (
               <div key={i}>
-                <Skeleton className="h-4 w-16 mb-1" />
+                <Skeleton className="mb-1 h-4 w-16" />
                 <Skeleton className="h-5 w-32" />
               </div>
             ))}

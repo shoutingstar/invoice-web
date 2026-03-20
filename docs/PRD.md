@@ -3,9 +3,11 @@
 ## 1. 핵심 정보
 
 ### 목적
+
 노션 데이터베이스에서 관리되는 견적서를 클라이언트가 웹으로 편하게 확인하고 PDF로 다운받을 수 있는 웹뷰 제공
 
 ### 타겟 사용자
+
 - **영업팀**: 중소 건설사/서비스사의 견적서 발송 담당자
 - **고객사**: 견적서 수신 및 확인 담당자
 
@@ -30,18 +32,21 @@
 ## 3. 기능 명세 (Feature Specification)
 
 ### F001: 사용자 인증 (로그인)
+
 - 기존 로그인 페이지 활용
 - 이메일 기반 사용자 인증
 - 세션 기반 인증 관리
 - 인증 실패 시 에러 메시지 표시
 
 ### F002: 대시보드
+
 - 로그인 후 대시보드 페이지 진입
 - 사용자 정보 표시 (환영 메시지)
 - 견적서 목록 접근 버튼
 - 로그아웃 기능
 
 ### F003: 견적서 목록 조회
+
 - 노션 데이터베이스에서 견적서 데이터 조회
 - 견적서 목록을 카드 형식으로 표시
 - 각 카드에 표시되는 정보:
@@ -54,6 +59,7 @@
 - 페이지네이션 (10건 이상인 경우)
 
 ### F004: 견적서 상세 조회
+
 - 견적서 상세 정보 표시
 - 표시되는 정보:
   - 견적서 번호
@@ -68,12 +74,14 @@
 - 관련 견적서 목록으로 돌아가기 버튼
 
 ### F005: PDF 다운로드
+
 - 견적서 상세 정보를 PDF 형식으로 변환
 - PDF 생성 (puppeteer 또는 html2pdf 라이브러리 사용)
 - 다운로드 버튼 클릭 시 자동 다운로드
 - PDF 파일명: `견적서_[견적번호]_[작성날짜].pdf` 형식
 
 ### F006: 예외 처리
+
 - 존재하지 않는 견적서 요청 시 404 페이지 표시
 - 노션 API 연결 실패 시 에러 페이지 표시
 - 권한 없는 견적서 접근 시 접근 거부 페이지 표시
@@ -105,6 +113,7 @@ Invoice Web
 ## 5. 페이지별 상세 기능
 
 ### 5.1 로그인 페이지
+
 - **역할**: 사용자 인증 진입점
 - **진입 경로**: 앱 초기 접근 (미인증 상태)
 - **기능 목록**:
@@ -115,6 +124,7 @@ Invoice Web
   - 입력값 검증 및 에러 메시지 표시 (F001)
 
 ### 5.2 대시보드 페이지
+
 - **역할**: 인증된 사용자의 메인 진입점
 - **진입 경로**: 로그인 성공 후 자동 이동
 - **기능 목록**:
@@ -125,6 +135,7 @@ Invoice Web
   - 네비게이션 헤더 (로고, 사용자명, 로그아웃)
 
 ### 5.3 견적서 목록 페이지
+
 - **역할**: 사용자가 조회 가능한 모든 견적서 표시
 - **진입 경로**: 대시보드 → 견적서 목록 클릭
 - **기능 목록**:
@@ -137,6 +148,7 @@ Invoice Web
   - 로딩 상태 표시 (F003)
 
 ### 5.4 견적서 상세 페이지
+
 - **역할**: 견적서의 모든 상세 정보 표시
 - **진입 경로**: 견적서 목록 → 견적서 카드 클릭
 - **기능 목록**:
@@ -151,6 +163,7 @@ Invoice Web
   - 존재하지 않는 견적서 시 에러 표시 (F006)
 
 ### 5.5 오류 페이지
+
 - **역할**: 예외 상황 처리
 - **진입 경로**: 자동 라우팅 (404, 403, 500 등)
 - **기능 목록**:
@@ -164,48 +177,51 @@ Invoice Web
 ## 6. 데이터 모델 (Data Model)
 
 ### 6.1 Invoice (견적서)
+
 ```typescript
 interface Invoice {
-  id: string;                    // Notion Database ID
-  invoiceNumber: string;         // 견적서 번호
-  clientName: string;            // 고객사명
-  clientPhone: string;           // 고객 연락처
-  clientEmail: string;           // 고객 이메일
-  createdDate: string;           // 작성 날짜 (ISO 8601)
-  validUntil: string;            // 유효기간 (ISO 8601)
-  totalAmount: number;           // 합계 금액
-  status: 'pending' | 'approved'; // 상태
-  items: InvoiceItem[];          // 견적 항목
-  notes: string;                 // 특수 요청사항/비고
-  managerName: string;           // 담당자명
-  managerEmail: string;          // 담당자 이메일
-  managerPhone: string;          // 담당자 연락처
-  createdBy: string;             // 작성자 ID (Notion User)
+  id: string // Notion Database ID
+  invoiceNumber: string // 견적서 번호
+  clientName: string // 고객사명
+  clientPhone: string // 고객 연락처
+  clientEmail: string // 고객 이메일
+  createdDate: string // 작성 날짜 (ISO 8601)
+  validUntil: string // 유효기간 (ISO 8601)
+  totalAmount: number // 합계 금액
+  status: 'pending' | 'approved' // 상태
+  items: InvoiceItem[] // 견적 항목
+  notes: string // 특수 요청사항/비고
+  managerName: string // 담당자명
+  managerEmail: string // 담당자 이메일
+  managerPhone: string // 담당자 연락처
+  createdBy: string // 작성자 ID (Notion User)
 }
 ```
 
 ### 6.2 InvoiceItem (견적 항목)
+
 ```typescript
 interface InvoiceItem {
-  id: string;                    // 항목 ID
-  itemName: string;              // 품명/서비스명
-  quantity: number;              // 수량
-  unitPrice: number;             // 단가
-  amount: number;                // 금액 (수량 × 단가)
-  description: string;           // 상세 설명 (선택사항)
+  id: string // 항목 ID
+  itemName: string // 품명/서비스명
+  quantity: number // 수량
+  unitPrice: number // 단가
+  amount: number // 금액 (수량 × 단가)
+  description: string // 상세 설명 (선택사항)
 }
 ```
 
 ### 6.3 User (사용자)
+
 ```typescript
 interface User {
-  id: string;                    // 사용자 ID
-  email: string;                 // 이메일 (고유)
-  name: string;                  // 사용자명
-  role: 'salesperson' | 'client'; // 역할 (영업팀/고객사)
-  companyName: string;           // 회사명
-  phone: string;                 // 연락처
-  createdAt: string;             // 가입 날짜
+  id: string // 사용자 ID
+  email: string // 이메일 (고유)
+  name: string // 사용자명
+  role: 'salesperson' | 'client' // 역할 (영업팀/고객사)
+  companyName: string // 회사명
+  phone: string // 연락처
+  createdAt: string // 가입 날짜
 }
 ```
 
@@ -214,6 +230,7 @@ interface User {
 ## 7. 기술 스택 (Tech Stack)
 
 ### 7.1 프론트엔드
+
 - **Framework**: Next.js 15.5.3 (App Router + Turbopack)
 - **Runtime**: React 19.1.0
 - **Language**: TypeScript 5.x
@@ -224,17 +241,20 @@ interface User {
 - **State Management**: React Context API (또는 필요시 Zustand)
 
 ### 7.2 백엔드/외부 연동
+
 - **API**: Notion API (@notionhq/client)
 - **인증**: NextAuth.js v5 (기존 로그인 구조 활용)
 - **PDF 생성**: html2pdf 또는 puppeteer
 
 ### 7.3 개발 도구
+
 - **Linting**: ESLint
 - **Code Formatting**: Prettier
 - **Git Hooks**: Husky + lint-staged
 - **Database**: Notion (외부 CMS)
 
 ### 7.4 배포
+
 - **호스팅**: Vercel (권장)
 - **환경 변수**: `.env.local` (Notion API 키 등)
 
@@ -243,6 +263,7 @@ interface User {
 ## 8. MVP 범위 정의
 
 ### 포함 사항
+
 - ✅ 로그인 인증 (기존 페이지 활용)
 - ✅ 대시보드 페이지
 - ✅ 견적서 목록 조회 (Notion API 연동)
@@ -252,6 +273,7 @@ interface User {
 - ✅ 반응형 UI (모바일/태블릿/데스크탑)
 
 ### 제외 사항 (향후 기능)
+
 - ❌ 견적서 작성/수정/삭제
 - ❌ 고급 권한 관리 (세부 권한 제어)
 - ❌ 계약서 관리
@@ -266,18 +288,21 @@ interface User {
 ## 9. 성공 기준 (Success Criteria)
 
 ### 기술적 기준
+
 - [ ] 모든 페이지가 모바일, 태블릿, 데스크탑에서 정상 동작
 - [ ] Notion API 연동으로 실시간 데이터 조회 성공
 - [ ] PDF 다운로드 정상 동작 (파일명, 레이아웃)
 - [ ] 빌드 성공 및 배포 가능 상태
 
 ### 사용성 기준
+
 - [ ] 로그인부터 PDF 다운로드까지 3단계 이내로 완료 가능
 - [ ] 모든 페이지 로딩 시간 3초 이내
 - [ ] 에러 메시지가 명확하고 사용자 친화적
 - [ ] 네비게이션이 직관적이고 일관성 있음
 
 ### 기능 기준
+
 - [ ] 견적서 목록 50건 이상 처리 가능
 - [ ] 각 견적서마다 최소 10개 항목까지 표시 가능
 - [ ] PDF 레이아웃이 인쇄/화면 모두에서 정상 표현
@@ -287,18 +312,21 @@ interface User {
 ## 10. 개발 로드맵 (Development Roadmap)
 
 ### Phase 1: 기본 구조 (Week 1)
+
 - [ ] 대시보드 페이지 마크업 및 스타일링
 - [ ] 견적서 목록 페이지 UI 구성`
 - [ ] 견적서 상세 페이지 UI 구성
 - [ ] Notion API 연동 설정
 
 ### Phase 2: 기능 구현 (Week 2)
+
 - [ ] 견적서 목록 조회 기능 (F003)
 - [ ] 견적서 상세 조회 기능 (F004)
 - [ ] PDF 다운로드 기능 (F005)
 - [ ] 에러 처리 (F006)
 
 ### Phase 3: 완성 및 테스트 (Week 3)
+
 - [ ] 전체 사용자 여정 테스트
 - [ ] 반응형 UI 테스트
 - [ ] 성능 최적화
@@ -320,6 +348,7 @@ interface User {
 ## 체크리스트
 
 ### 기능-페이지 정합성 검증
+
 - [x] F001 (사용자 인증) → 로그인 페이지, 대시보드 페이지에서 구현
 - [x] F002 (대시보드) → 대시보드 페이지에서 구현
 - [x] F003 (견적서 목록 조회) → 견적서 목록 페이지에서 구현
@@ -328,11 +357,13 @@ interface User {
 - [x] F006 (예외 처리) → 오류 페이지, 모든 페이지에서 구현
 
 ### 메뉴 구조 검증
+
 - [x] 모든 페이지가 메뉴 구조에 포함됨
 - [x] 모든 네비게이션 경로가 명확함
 - [x] 순환 참조 또는 막힌 경로 없음
 
 ### 누락/중복 검증
+
 - [x] 누락된 기능 없음
 - [x] 중복된 기능 없음
 - [x] 모든 기능 ID가 일관되게 사용됨

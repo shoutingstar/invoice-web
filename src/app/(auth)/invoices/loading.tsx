@@ -7,7 +7,7 @@ export default function InvoicesLoading() {
     <Container className="py-8">
       {/* 헤더 스켈레톤 */}
       <section className="mb-6">
-        <Skeleton className="h-9 w-48 mb-2" />
+        <Skeleton className="mb-2 h-9 w-48" />
         <Skeleton className="h-5 w-56" />
       </section>
 
@@ -15,7 +15,7 @@ export default function InvoicesLoading() {
       <section className="mb-6">
         <Card>
           <CardContent className="pt-6">
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <Skeleton className="h-10 flex-1" />
               <Skeleton className="h-10 w-24" />
               <Skeleton className="h-10 w-24" />
@@ -26,9 +26,9 @@ export default function InvoicesLoading() {
 
       {/* 카드 그리드 스켈레톤 (5개) */}
       <section className="mb-6">
-        <Skeleton className="h-4 w-20 mb-3" />
+        <Skeleton className="mb-3 h-4 w-20" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3, 4, 5].map((i) => (
+          {[1, 2, 3, 4, 5].map(i => (
             <Card key={i} className="h-full">
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between">
@@ -40,8 +40,8 @@ export default function InvoicesLoading() {
                 </div>
               </CardHeader>
               <CardContent>
-                <Skeleton className="h-5 w-40 mb-1" />
-                <Skeleton className="h-4 w-full mb-3" />
+                <Skeleton className="mb-1 h-5 w-40" />
+                <Skeleton className="mb-3 h-4 w-full" />
                 <div className="flex items-center justify-between">
                   <Skeleton className="h-4 w-24" />
                   <Skeleton className="h-4 w-20" />

@@ -6,7 +6,7 @@ export default function AuthLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <AuthHeader />
       <main className="flex-1">{children}</main>
     </div>

@@ -3,7 +3,7 @@
  * Phase 2 UI/UX 개발용 mock 데이터
  */
 
-import type { Invoice } from '@/lib/types/invoice';
+import type { Invoice } from '@/lib/types/invoice'
 
 // 더미 데이터 12건
 const MOCK_INVOICES: Invoice[] = [
@@ -427,20 +427,20 @@ const MOCK_INVOICES: Invoice[] = [
       },
     ],
   },
-];
+]
 
 /**
  * 모든 견적서 조회
  */
 export function getMockInvoices(): Invoice[] {
-  return MOCK_INVOICES;
+  return MOCK_INVOICES
 }
 
 /**
  * 특정 견적서 조회 (ID 기반)
  */
 export function getMockInvoiceById(id: string): Invoice | undefined {
-  return MOCK_INVOICES.find((invoice) => invoice.id === id);
+  return MOCK_INVOICES.find(invoice => invoice.id === id)
 }
 
 /**
@@ -449,9 +449,9 @@ export function getMockInvoiceById(id: string): Invoice | undefined {
 export function getInvoiceStats() {
   return {
     total: MOCK_INVOICES.length,
-    대기: MOCK_INVOICES.filter((inv) => inv.status === '대기').length,
-    승인완료: MOCK_INVOICES.filter((inv) => inv.status === '승인완료').length,
-    발송완료: MOCK_INVOICES.filter((inv) => inv.status === '발송완료').length,
-    작성중: MOCK_INVOICES.filter((inv) => inv.status === '작성중').length,
-  };
+    대기: MOCK_INVOICES.filter(inv => inv.status === '대기').length,
+    승인완료: MOCK_INVOICES.filter(inv => inv.status === '승인완료').length,
+    발송완료: MOCK_INVOICES.filter(inv => inv.status === '발송완료').length,
+    작성중: MOCK_INVOICES.filter(inv => inv.status === '작성중').length,
+  }
 }

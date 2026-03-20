@@ -8,21 +8,24 @@
 ## 1. 프로젝트 개요 (Project Overview)
 
 ### 프로젝트 목적
+
 - **Invoice Web**: 노션 데이터베이스에서 관리되는 견적서를 웹으로 조회하고 PDF로 다운로드하는 서비스
 - **대상 사용자**: 중소 건설사/서비스사의 영업팀 및 고객사
 - **핵심 기능**: 로그인 → 대시보드 → 견적서 목록 → 상세 조회 → PDF 다운로드
 
 ### 기술 스택
-| 항목 | 기술 |
-|------|------|
-| **Framework** | Next.js 15.5.3 (App Router + Turbopack) |
-| **Runtime** | React 19.1.0 + TypeScript 5.x |
-| **Styling** | TailwindCSS v4 + shadcn/ui (new-york) |
-| **Forms** | React Hook Form v7 + Zod v4 |
-| **Components** | Radix UI + Lucide Icons |
-| **Build** | Turbopack (dev/prod 모두) |
+
+| 항목           | 기술                                    |
+| -------------- | --------------------------------------- |
+| **Framework**  | Next.js 15.5.3 (App Router + Turbopack) |
+| **Runtime**    | React 19.1.0 + TypeScript 5.x           |
+| **Styling**    | TailwindCSS v4 + shadcn/ui (new-york)   |
+| **Forms**      | React Hook Form v7 + Zod v4             |
+| **Components** | Radix UI + Lucide Icons                 |
+| **Build**      | Turbopack (dev/prod 모두)               |
 
 ### 개발 명령어
+
 - `npm run dev` - 개발 서버 (Turbopack)
 - `npm run build` - 프로덕션 빌드
 - `npm run check-all` - 모든 검사 실행 (권장)
@@ -88,6 +91,7 @@ docs/
 ```
 
 ### 파일 추가 시 규칙
+
 - **페이지 컴포넌트**: `src/app/[feature]/page.tsx`
 - **일반 컴포넌트**: `src/components/[category]/component-name.tsx` (kebab-case)
 - **유틸리티 함수**: `src/lib/feature-utils.ts`
@@ -99,6 +103,7 @@ docs/
 ## 3. 코드 표준 (Code Standards)
 
 ### TypeScript 규칙
+
 - **항상 TypeScript 사용**: `.tsx` 또는 `.ts` 확장자 필수
 - **Type 추론 활용**: 컴파일러가 타입을 추론할 수 있으면 명시적 타입 생략 가능
 - **Union/Interface 선호**: type 대신 interface 우선 사용 (shadcn 패턴)
@@ -121,12 +126,14 @@ const data: any = fetchData()
 ```
 
 ### 파일명 규칙
+
 - **컴포넌트**: kebab-case (예: `login-form.tsx`, `mobile-nav.tsx`)
 - **유틸리티**: kebab-case (예: `env.ts`, `utils.ts`)
 - **디렉토리**: kebab-case (예: `src/components/ui`)
 - **Index 파일**: 컴포넌트 라이브러리화 시 `index.ts` 사용
 
 ### 코드 포매팅
+
 - **Prettier 자동 포매팅**: 2칸 들여쓰기 (설정됨)
 - **Tailwind 클래스 정렬**: Prettier + tailwindcss 플러그인이 자동 정렬
 - **Import 정렬**: ESLint 설정에 따라 자동 정렬
@@ -139,11 +146,13 @@ const data: any = fetchData()
 ### 클라이언트 vs 서버 컴포넌트
 
 **서버 컴포넌트 (기본값)**
+
 - 'use client' 지시문 없음
 - 데이터베이스/API 직접 접근 가능
 - 환경 변수 접근 가능 (서버 전용)
 
 **클라이언트 컴포넌트**
+
 - 'use client' 지시문 필수 (최상단)
 - State, Effect, Event Handler 필요 시 사용
 - Form, Dialog, Dropdown 등 대부분의 인터랙티브 컴포넌트
@@ -174,16 +183,24 @@ export default async function InvoicePage({
 ### shadcn/ui 컴포넌트 사용
 
 **사용 가능한 컴포넌트**
+
 - `Button`, `Input`, `Card`, `Form`, `Dialog`, `Select`, `Label` 등
 - `Sonner` (토스트 알림)
 - 추가 컴포넌트: `npx shadcn@latest add [component-name]`
 
 **패턴 예시**
+
 ```typescript
 // ✅ Form with shadcn components
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, FormField, FormItem, FormLabel, FormControl } from '@/components/ui/form'
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
@@ -197,6 +214,7 @@ import { Button } from '@/components/ui/button'
 ### React Hook Form + Zod 조합
 
 **필수 패턴**
+
 1. Zod 스키마 정의
 2. `useForm`으로 form 초기화
 3. `FormField` + `FormControl` + `FormMessage` 조합
@@ -260,6 +278,7 @@ export function LoginForm() {
 ```
 
 ### 검증 규칙
+
 - **필드 검증**: Zod에서 처리 (폼 레벨)
 - **비동기 검증**: refine/superRefine 사용
 - **에러 메시지**: 한글로 작성
@@ -272,6 +291,7 @@ export function LoginForm() {
 ### TailwindCSS v4 규칙
 
 **클래스 작성**
+
 - Tailwind 클래스만 사용 (CSS 파일/모듈 금지)
 - `cn()` 유틸로 조건부 클래스 조합
 - Prettier가 클래스 순서 자동 정렬
@@ -300,6 +320,7 @@ import styles from './button.module.css' // ❌
 ```
 
 ### 색상 & 디자인 토큰
+
 - Tailwind 기본 색상 사용 (커스터마이징 불필요)
 - shadcn 테마 변수 활용 (`bg-background`, `text-foreground` 등)
 - Dark mode: `next-themes` 라이브러리로 관리 (이미 설정됨)
@@ -311,6 +332,7 @@ import styles from './button.module.css' // ❌
 ### 디렉토리 구조 패턴
 
 **동적 라우트**
+
 ```
 src/app/
 ├── [feature]/
@@ -323,6 +345,7 @@ src/app/
 ### Server Actions 사용 (API 라우트 대신)
 
 **패턴**
+
 ```typescript
 // src/app/actions.ts
 'use server'
@@ -342,6 +365,7 @@ export async function loginAction(values: z.infer<typeof loginSchema>) {
 ```
 
 **클라이언트에서 호출**
+
 ```typescript
 'use client'
 
@@ -355,6 +379,7 @@ export function LoginForm() {
 ```
 
 ### 메타데이터 설정
+
 - Root Layout에서 전역 metadata 정의
 - 페이지별: `generateMetadata()` 함수 사용
 
@@ -373,26 +398,31 @@ export const metadata: Metadata = {
 ### 파일 수정 시 함께 확인해야 할 파일
 
 **타입 변경 시**
+
 - src/types/[feature].types.ts 생성/수정
 - 해당 타입을 사용하는 모든 컴포넌트 확인
 
 **환경 변수 추가 시**
+
 - src/lib/env.ts 수정
 - .env.local (로컬 개발)
 - .env.production (배포용)
 - vercel 환경변수 설정 (배포 시)
 
 **API/Server Action 추가 시**
+
 - src/app/actions.ts 수정
 - 관련 컴포넌트의 onSubmit 함수 확인
 - 에러 처리 추가
 
 **UI 컴포넌트 추가/수정 시**
+
 - src/components/ui/[component].tsx
 - shadcn 컴포넌트면 components.json 확인
 - 사용 중인 페이지들 테스트
 
 **스타일 변경 시**
+
 - tailwind.config.ts (색상/토큰 변경)
 - src/globals.css (글로벌 스타일)
 - 영향 범위 확인 (다크 모드 등)
@@ -403,27 +433,30 @@ export const metadata: Metadata = {
 
 ### 우선순위 기준
 
-| 우선순위 | 기준 | 예시 |
-|---------|------|------|
-| 1 | **기존 패턴 따르기** | 이미 있는 컴포넌트와 동일한 구조 |
-| 2 | **shadcn/ui 컴포넌트** | 커스텀 작성 전에 shadcn 확인 |
-| 3 | **Server Components** | 가능한 한 서버 컴포넌트 사용 |
-| 4 | **React Hook Form + Zod** | 모든 폼 검증에 사용 |
-| 5 | **TailwindCSS만** | 다른 CSS 방식 사용 금지 |
+| 우선순위 | 기준                      | 예시                             |
+| -------- | ------------------------- | -------------------------------- |
+| 1        | **기존 패턴 따르기**      | 이미 있는 컴포넌트와 동일한 구조 |
+| 2        | **shadcn/ui 컴포넌트**    | 커스텀 작성 전에 shadcn 확인     |
+| 3        | **Server Components**     | 가능한 한 서버 컴포넌트 사용     |
+| 4        | **React Hook Form + Zod** | 모든 폼 검증에 사용              |
+| 5        | **TailwindCSS만**         | 다른 CSS 방식 사용 금지          |
 
 ### 의사결정 플로우
 
 **새로운 컴포넌트 필요할 때**
+
 1. shadcn에 있는가? → 있으면 추가
 2. 기존 컴포넌트를 조합할 수 있는가? → 조합
 3. 커스텀이 필수인가? → `'use client'` + Tailwind로 작성
 
 **폼 필드 필요할 때**
+
 1. shadcn/form + React Hook Form 사용
 2. Zod 스키마 정의
 3. FormField + FormControl + FormMessage 조합
 
 **데이터 가져오기**
+
 1. 페이지/레이아웃에서 가능한가? → 서버 컴포넌트
 2. 클라이언트에서만 가능한가? → useEffect + fetch or Server Action
 3. 반복되는가? → 커스텀 Hook (use-feature.ts)
@@ -433,12 +466,14 @@ export const metadata: Metadata = {
 ## 10. 금지되는 패턴 (Prohibited Actions)
 
 ### ❌ 스타일링
+
 - `styled-components`, `emotion` 등 CSS-in-JS 라이브러리 사용
-- CSS modules (*.module.css) 생성
+- CSS modules (\*.module.css) 생성
 - Inline style prop 과다 사용 (1-2개만 가능)
 - 새로운 CSS 파일 생성
 
 ### ❌ 컴포넌트 작성
+
 - Props drilling 과다 (3단계 이상)
   - → Context API 또는 Server Components로 해결
 - 기본 UI는 커스텀 작성 (Button, Input 등)
@@ -446,6 +481,7 @@ export const metadata: Metadata = {
 - React.FC 타입 명시 (타입 추론 활용)
 
 ### ❌ 폼 처리
+
 - 직접 state 관리 (useState로 각 필드 관리)
   - → React Hook Form 사용
 - HTML5 검증만 사용
@@ -454,20 +490,23 @@ export const metadata: Metadata = {
   - → Server Action에서 검증
 
 ### ❌ Next.js 패턴
+
 - API 라우트 (src/app/api/) 신규 생성
   - → Server Actions 사용
-- 클라이언트 전용 환경 변수 (REACT_APP_* 형식)
+- 클라이언트 전용 환경 변수 (REACT*APP*\* 형식)
   - → next.config.ts에서 직렬화
 - getServerSideProps, getStaticProps
   - → async/await 또는 Server Actions
 
 ### ❌ 데이터
+
 - 노션 API 직접 호출 (클라이언트에서)
   - → Server Action을 통해 서버에서만 호출
 - 민감한 정보 클라이언트에 노출
   - → 서버에서 처리 후 필요한 것만 전달
 
 ### ❌ 의존성
+
 - 설정 변경 (eslint, prettier, tsconfig 함부로 수정)
   - → 기존 설정 유지
 - 새로운 패키지 설치 (요청 없이)
@@ -478,17 +517,20 @@ export const metadata: Metadata = {
 ## 11. 배포 & 빌드 (Build & Deployment)
 
 ### 빌드 확인 체크리스트
+
 ```bash
 npm run check-all    # TypeScript, ESLint, Prettier 모두 통과
 npm run build        # 프로덕션 빌드 성공
 ```
 
 ### Vercel 배포 (권장)
+
 - Next.js 자동 감지
 - 환경 변수 설정 필수 (프로젝트 설정)
 - 배포 전 `npm run build` 로컬 검증
 
 ### 환경 변수 관리
+
 - **개발**: .env.local (git 무시됨)
 - **배포**: Vercel Dashboard 설정
 - **타입 안정성**: src/lib/env.ts에서 검증
@@ -498,6 +540,7 @@ npm run build        # 프로덕션 빌드 성공
 ## 12. 개발 가이드 참조
 
 상세 내용은 다음 문서 참조:
+
 - **프로젝트 요구사항**: @/docs/PRD.md
 - **개발 로드맵**: @/docs/ROADMAP.md
 - **Next.js 15 가이드**: @/docs/guides/nextjs-15.md

@@ -2,7 +2,15 @@ import Link from 'next/link'
 import { Container } from '@/components/layout/container'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { FileText, Plus, ArrowRight, TrendingUp, Clock, CheckCircle2, Send } from 'lucide-react'
+import {
+  FileText,
+  Plus,
+  ArrowRight,
+  TrendingUp,
+  Clock,
+  CheckCircle2,
+  Send,
+} from 'lucide-react'
 import { InvoiceCard } from '@/components/invoices/invoice-card'
 import { getMockInvoices, getInvoiceStats } from '@/lib/mock-data'
 import { ROUTES } from '@/lib/constants'
@@ -25,7 +33,7 @@ function StatCard({
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardTitle className="text-muted-foreground text-sm font-medium">
             {title}
           </CardTitle>
           <div className={`rounded-lg ${bgColor} p-2`}>
@@ -43,7 +51,12 @@ function StatCard({
 export default function DashboardPage() {
   const invoices = getMockInvoices()
   const stats = getInvoiceStats()
-  const recentInvoices = invoices.sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()).slice(0, 5)
+  const recentInvoices = invoices
+    .sort(
+      (a, b) =>
+        new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
+    )
+    .slice(0, 5)
 
   return (
     <Container className="py-8">
@@ -59,7 +72,7 @@ export default function DashboardPage() {
 
       {/* 통계 카드 섹션 */}
       <section className="mb-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             icon={TrendingUp}
             title="전체 견적서"
@@ -93,20 +106,20 @@ export default function DashboardPage() {
 
       {/* 빠른 링크 섹션 */}
       <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">빠른 메뉴</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <h2 className="mb-4 text-xl font-semibold">빠른 메뉴</h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {/* 견적서 목록 카드 */}
-          <Card className="hover:shadow-md transition-shadow">
+          <Card className="transition-shadow hover:shadow-md">
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-primary/10 p-2">
-                  <FileText className="h-5 w-5 text-primary" />
+                <div className="bg-primary/10 rounded-lg p-2">
+                  <FileText className="text-primary h-5 w-5" />
                 </div>
                 <CardTitle className="text-base">견적서 목록</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground mb-3">
+              <p className="text-muted-foreground mb-3 text-sm">
                 전체 견적서를 검색하고 조회합니다.
               </p>
               <Link href={ROUTES.INVOICES}>
@@ -119,17 +132,17 @@ export default function DashboardPage() {
           </Card>
 
           {/* 새 견적서 작성 카드 */}
-          <Card className="hover:shadow-md transition-shadow">
+          <Card className="transition-shadow hover:shadow-md">
             <CardHeader className="pb-2">
               <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-primary/10 p-2">
-                  <Plus className="h-5 w-5 text-primary" />
+                <div className="bg-primary/10 rounded-lg p-2">
+                  <Plus className="text-primary h-5 w-5" />
                 </div>
                 <CardTitle className="text-base">새 견적서 작성</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground mb-3">
+              <p className="text-muted-foreground mb-3 text-sm">
                 새로운 견적서를 작성합니다. (준비 중)
               </p>
               <Button variant="outline" size="sm" className="w-full" disabled>
@@ -142,7 +155,7 @@ export default function DashboardPage() {
 
       {/* 최근 견적서 섹션 */}
       <section>
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold">최근 견적서</h2>
           <Link href={ROUTES.INVOICES}>
             <Button variant="ghost" size="sm">
@@ -153,7 +166,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid gap-4">
-          {recentInvoices.map((invoice) => (
+          {recentInvoices.map(invoice => (
             <InvoiceCard
               key={invoice.id}
               invoice={{

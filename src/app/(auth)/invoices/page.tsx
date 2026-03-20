@@ -28,7 +28,7 @@ export default function InvoicesPage() {
   const allInvoices = getMockInvoices()
 
   // 필터링 로직 (Phase 4에서 완성, 현재는 UI만)
-  const filteredInvoices = allInvoices.filter((invoice) => {
+  const filteredInvoices = allInvoices.filter(invoice => {
     const matchesSearch =
       searchQuery === '' ||
       invoice.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -43,7 +43,10 @@ export default function InvoicesPage() {
   const itemsPerPage = PAGINATION.ITEMS_PER_PAGE
   const totalPages = Math.ceil(filteredInvoices.length / itemsPerPage)
   const startIdx = (currentPage - 1) * itemsPerPage
-  const paginatedInvoices = filteredInvoices.slice(startIdx, startIdx + itemsPerPage)
+  const paginatedInvoices = filteredInvoices.slice(
+    startIdx,
+    startIdx + itemsPerPage
+  )
 
   return (
     <Container className="py-8">
@@ -59,15 +62,15 @@ export default function InvoicesPage() {
       <section className="mb-6">
         <Card>
           <CardContent className="pt-6">
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
               {/* 검색 입력 */}
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                 <Input
                   placeholder="고객사명 또는 견적서 번호로 검색..."
                   className="pl-9"
                   value={searchQuery}
-                  onChange={(e) => {
+                  onChange={e => {
                     setSearchQuery(e.target.value)
                     setCurrentPage(1)
                   }}
@@ -76,7 +79,7 @@ export default function InvoicesPage() {
               {/* 상태 필터 */}
               <Select
                 value={statusFilter}
-                onValueChange={(value) => {
+                onValueChange={value => {
                   setStatusFilter(value as InvoiceStatus | '')
                   setCurrentPage(1)
                 }}
@@ -85,8 +88,11 @@ export default function InvoicesPage() {
                   <SelectValue placeholder="상태 선택" />
                 </SelectTrigger>
                 <SelectContent>
-                  {INVOICE_STATUS_OPTIONS.map((option) => (
-                    <SelectItem key={option.value || 'all'} value={option.value}>
+                  {INVOICE_STATUS_OPTIONS.map(option => (
+                    <SelectItem
+                      key={option.value || 'all'}
+                      value={option.value}
+                    >
                       {option.label}
                     </SelectItem>
                   ))}
@@ -101,13 +107,14 @@ export default function InvoicesPage() {
       <section className="mb-6">
         {paginatedInvoices.length > 0 ? (
           <>
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm text-muted-foreground">
-                총 {filteredInvoices.length}건 (페이지 {currentPage} / {totalPages})
+            <div className="mb-4 flex items-center justify-between">
+              <p className="text-muted-foreground text-sm">
+                총 {filteredInvoices.length}건 (페이지 {currentPage} /{' '}
+                {totalPages})
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {paginatedInvoices.map((invoice) => (
+              {paginatedInvoices.map(invoice => (
                 <InvoiceCard
                   key={invoice.id}
                   invoice={{
@@ -150,13 +157,13 @@ export default function InvoicesPage() {
               variant="outline"
               size="icon"
               disabled={currentPage === 1}
-              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
             >
               <ChevronLeft className="h-4 w-4" />
               <span className="sr-only">이전 페이지</span>
             </Button>
             <div className="flex items-center gap-1">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
                 <Button
                   key={page}
                   variant={currentPage === page ? 'default' : 'outline'}
@@ -171,7 +178,9 @@ export default function InvoicesPage() {
               variant="outline"
               size="icon"
               disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+              onClick={() =>
+                setCurrentPage(prev => Math.min(totalPages, prev + 1))
+              }
             >
               <ChevronRight className="h-4 w-4" />
               <span className="sr-only">다음 페이지</span>

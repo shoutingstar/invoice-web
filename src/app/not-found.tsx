@@ -6,16 +6,16 @@ import { FileSearch, Home } from 'lucide-react'
 export default function NotFound() {
   return (
     <Container className="py-8">
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center gap-6">
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6 text-center">
         {/* 아이콘 */}
-        <div className="rounded-full bg-muted p-6">
-          <FileSearch className="h-12 w-12 text-muted-foreground" />
+        <div className="bg-muted rounded-full p-6">
+          <FileSearch className="text-muted-foreground h-12 w-12" />
         </div>
 
         {/* 메시지 */}
         <div>
-          <h1 className="text-4xl font-bold mb-2">404</h1>
-          <h2 className="text-xl font-semibold mb-2">
+          <h1 className="mb-2 text-4xl font-bold">404</h1>
+          <h2 className="mb-2 text-xl font-semibold">
             페이지를 찾을 수 없습니다
           </h2>
           <p className="text-muted-foreground max-w-sm">

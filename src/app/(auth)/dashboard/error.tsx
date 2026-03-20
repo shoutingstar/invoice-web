@@ -19,12 +19,13 @@ export default function DashboardError({ error, reset }: DashboardErrorProps) {
 
   return (
     <Container className="py-8">
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-6">
+      <div className="flex min-h-[400px] flex-col items-center justify-center gap-6">
         <Alert variant="destructive" className="max-w-md">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>대시보드를 불러오지 못했습니다</AlertTitle>
           <AlertDescription>
-            {error.message || '알 수 없는 오류가 발생했습니다. 다시 시도해 주세요.'}
+            {error.message ||
+              '알 수 없는 오류가 발생했습니다. 다시 시도해 주세요.'}
           </AlertDescription>
         </Alert>
         <Button onClick={reset} variant="outline" className="gap-2">
