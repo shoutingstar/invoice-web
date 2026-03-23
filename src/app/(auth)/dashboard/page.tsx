@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { auth } from '@/auth'
 import { Container } from '@/components/layout/container'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -10,10 +11,12 @@ import {
   Clock,
   CheckCircle2,
   Send,
+  AlertCircle,
 } from 'lucide-react'
 import { InvoiceCard } from '@/components/invoices/invoice-card'
-import { getMockInvoices, getInvoiceStats } from '@/lib/mock-data'
+import { fetchInvoices, fetchInvoiceStats } from '@/lib/api/notion-invoices'
 import { ROUTES } from '@/lib/constants'
+import type { Invoice } from '@/lib/types/invoice'
 
 // 통계 카드 컴포넌트
 function StatCard({
@@ -48,27 +51,78 @@ function StatCard({
   )
 }
 
-export default function DashboardPage() {
-  const invoices = getMockInvoices()
-  const stats = getInvoiceStats()
-  const recentInvoices = invoices
-    .sort(
-      (a, b) =>
-        new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
-    )
-    .slice(0, 5)
+export default async function DashboardPage() {
+  // 인증된 사용자 정보 조회
+  const session = await auth()
+  const userName =
+    session?.user?.name || session?.user?.email?.split('@')[0] || '사용자'
+
+  // Notion API에서 데이터 조회
+  type StatsType = {
+    total: number
+    byStatus: {
+      대기: number
+      승인완료: number
+      발송완료: number
+      작성중: number
+    }
+  }
+
+  let stats: StatsType = {
+    total: 0,
+    byStatus: {
+      대기: 0,
+      승인완료: 0,
+      발송완료: 0,
+      작성중: 0,
+    },
+  }
+  let recentInvoices: Invoice[] = []
+  let apiError: string | null = null
+
+  try {
+    const [statsData, invoicesData] = await Promise.all([
+      fetchInvoiceStats(),
+      fetchInvoices({ limit: 5 }),
+    ])
+    stats = statsData
+    recentInvoices = invoicesData.invoices
+  } catch (err) {
+    apiError = err instanceof Error ? err.message : 'API 호출 실패'
+    console.error('Failed to fetch dashboard data:', apiError)
+  }
 
   return (
     <Container className="py-8">
       {/* 환영 메시지 섹션 */}
       <section className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">
-          안녕하세요, 김담당님
+          안녕하세요, {userName}님
         </h1>
         <p className="text-muted-foreground mt-2">
           오늘도 견적서 관리를 시작해 보세요.
         </p>
       </section>
+
+      {/* API 에러 표시 */}
+      {apiError && (
+        <section className="mb-6">
+          <div className="flex gap-3 rounded-lg border border-orange-200 bg-orange-50 p-4 dark:border-orange-900 dark:bg-orange-950">
+            <AlertCircle className="h-5 w-5 flex-shrink-0 text-orange-600 dark:text-orange-400" />
+            <div>
+              <p className="font-medium text-orange-900 dark:text-orange-100">
+                데이터 로드 실패
+              </p>
+              <p className="text-sm text-orange-800 dark:text-orange-200">
+                {apiError}
+              </p>
+              <p className="mt-2 text-xs text-orange-700 dark:text-orange-300">
+                환경변수를 확인해주세요: NOTION_API_KEY, NOTION_DATABASE_ID
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 통계 카드 섹션 */}
       <section className="mb-8">
@@ -83,21 +137,21 @@ export default function DashboardPage() {
           <StatCard
             icon={Clock}
             title="대기 중"
-            value={stats['대기']}
+            value={stats.byStatus['대기'] || 0}
             bgColor="bg-yellow-100 dark:bg-yellow-900"
             textColor="text-yellow-600 dark:text-yellow-400"
           />
           <StatCard
             icon={CheckCircle2}
             title="승인완료"
-            value={stats['승인완료']}
+            value={stats.byStatus['승인완료'] || 0}
             bgColor="bg-green-100 dark:bg-green-900"
             textColor="text-green-600 dark:text-green-400"
           />
           <StatCard
             icon={Send}
             title="발송완료"
-            value={stats['발송완료']}
+            value={stats.byStatus['발송완료'] || 0}
             bgColor="bg-purple-100 dark:bg-purple-900"
             textColor="text-purple-600 dark:text-purple-400"
           />

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Invoice } from './invoice'
 
 /**
  * API 응답 관련 타입 정의
@@ -20,7 +20,7 @@ export interface PaginatedResponse<T> {
 }
 
 export interface InvoiceListResult {
-  invoices: any[]
+  invoices: Invoice[]
   total: number
   page: number
   limit: number

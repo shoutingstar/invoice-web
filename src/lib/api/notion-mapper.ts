@@ -3,9 +3,7 @@
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints'
 import { Invoice, InvoiceStatus, InvoiceItem } from '@/lib/types/invoice'
 
-// Notion 상태값 → 앱 상태값 매핑
-// TODO(human): Notion DB에서 실제 상태값 확인 후 이 맵을 업데이트하세요
-// 예: DB에서 "Pending" vs "대기" 중 어느 것을 사용하는지 확인
+// Notion 상태값 → 앱 상태값 매핑 (CSV 기반 한글 상태값 사용)
 const NOTION_STATUS_MAP: Record<string, InvoiceStatus> = {
   // 한글 상태값 (현재 CSV 기반 가정)
   대기: '대기',
@@ -31,14 +29,19 @@ export function mapNotionPageToInvoice(
 ): Invoice {
   const properties = page.properties as Record<string, any>
 
-  // 각 필드 추출
+  // 각 필드 추출 (CSV 필드명 기반)
   const invoiceNumber = extractText(properties['견적 번호'] || properties['invoiceNumber'])
   const customerName = extractText(properties['고객사명'] || properties['customerName'])
   const customerPhone = extractText(properties['고객 연락처'] || properties['customerPhone'])
   const customerEmail = extractText(properties['고객 이메일'] || properties['customerEmail']) || ''
   const statusRaw = extractText(properties['상태'] || properties['status'])
   const amountRaw = extractText(properties['합계 금액'] || properties['totalAmount'])
-  const createdDateRaw = extractDate(properties['작성일'] || properties['createdDate'])
+  const createdDateRaw = extractDate(properties['작성 날짜'] || properties['createdDate'])
+  const validUntilRaw = extractDate(properties['유효기간'] || properties['validUntil'])
+  const managerName = extractText(properties['담당자명'] || properties['managerName'])
+  const managerEmail = extractText(properties['담당자 이메일'] || properties['managerEmail']) || ''
+  const managerPhone = extractText(properties['담당자 연락처'] || properties['managerPhone']) || ''
+  const notes = extractText(properties['특수 요청사항/비고'] || properties['notes']) || ''
 
   // 상태값 변환 (매퍼 사용)
   const status: InvoiceStatus = NOTION_STATUS_MAP[statusRaw] || ('대기' as InvoiceStatus)
@@ -49,19 +52,22 @@ export function mapNotionPageToInvoice(
   // Notion Items를 InvoiceItem[]로 변환
   const items: InvoiceItem[] = notionItems.map((item, index) => ({
     id: item.id || `item-${index}`,
-    order: index,
-    itemName: item.description || item.itemName || 'N/A',
+    order: index + 1, // CSV의 순서는 1부터 시작
+    itemName: item.itemName || 'N/A',
     quantity: item.quantity || 0,
     unitPrice: item.unitPrice || 0,
     amount: item.amount || 0,
-    description: item.description,
+    description: item.description || '',
   }))
 
-  // 유효기간 (기본값: 생성일로부터 30일)
+  // 날짜 처리
   const createdDate = createdDateRaw || new Date().toISOString().split('T')[0]
-  const validUntilDate = new Date(createdDate)
-  validUntilDate.setDate(validUntilDate.getDate() + 30)
-  const validUntil = validUntilDate.toISOString().split('T')[0]
+  const validUntil =
+    validUntilRaw || (() => {
+      const date = new Date(createdDate)
+      date.setDate(date.getDate() + 30)
+      return date.toISOString().split('T')[0]
+    })()
 
   return {
     id: page.id,
@@ -73,18 +79,25 @@ export function mapNotionPageToInvoice(
     validUntil,
     status,
     totalAmount,
-    managerName: '담당자', // TODO: Notion에서 추출 또는 세션에서 가져오기
-    managerEmail: '', // TODO: Notion에서 추출 또는 세션에서 가져오기
-    managerPhone: '', // TODO: Notion에서 추출 또는 세션에서 가져오기
+    managerName: managerName || '담당자',
+    managerEmail,
+    managerPhone,
+    notes,
     items,
   }
 }
 
 /**
  * Notion 텍스트 필드에서 값을 추출합니다.
+ * number 타입도 지원 (금액 필드용)
  */
 function extractText(property: any): string {
   if (!property) return ''
+
+  // number 타입 (금액 필드가 number일 경우)
+  if (property.type === 'number' && property.number !== null) {
+    return String(property.number)
+  }
 
   if (property.type === 'title' && property.title?.[0]) {
     return property.title[0].plain_text || ''
@@ -102,13 +115,40 @@ function extractText(property: any): string {
 }
 
 /**
+ * 한글 날짜 문자열을 ISO 형식으로 변환합니다.
+ * 예: "2026년 3월 20일" → "2026-03-20"
+ */
+function parseKoreanDate(dateStr: string): string {
+  if (!dateStr) return new Date().toISOString().split('T')[0]
+
+  // "YYYY년 M월 DD일" 형식 파싱
+  const match = dateStr.match(/(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일/)
+  if (match) {
+    const [, year, month, day] = match
+    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+  }
+
+  return new Date().toISOString().split('T')[0]
+}
+
+/**
  * Notion 날짜 필드에서 날짜를 추출합니다.
+ * date 타입 또는 rich_text 타입 모두 지원
  */
 function extractDate(property: any): string {
   if (!property) return new Date().toISOString().split('T')[0]
 
+  // date 타입
   if (property.type === 'date' && property.date?.start) {
     return property.date.start
+  }
+
+  // rich_text 타입 (한글 날짜)
+  if (property.type === 'rich_text' || property.type === 'formula') {
+    const text = extractText(property)
+    if (text) {
+      return parseKoreanDate(text)
+    }
   }
 
   return new Date().toISOString().split('T')[0]
@@ -118,10 +158,13 @@ function extractDate(property: any): string {
  * 금액 문자열(예: "₩5,000,000")을 숫자로 파싱합니다.
  */
 function parseAmount(amountStr: string): number {
-  if (!amountStr) return 0
+  if (!amountStr && amountStr !== '0') return 0
+
+  // 문자열이 아닌 경우 (number 타입이면 그대로 반환)
+  if (typeof amountStr === 'number') return amountStr
 
   // 숫자와 쉼표만 추출
-  const cleaned = amountStr.replace(/[^0-9]/g, '')
+  const cleaned = String(amountStr).replace(/[^0-9]/g, '')
   return parseInt(cleaned, 10) || 0
 }
 

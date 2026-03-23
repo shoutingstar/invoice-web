@@ -50,7 +50,10 @@ function InfoItem({
 }
 
 export function InvoiceDetail({ invoice }: InvoiceDetailProps) {
-  const total = invoice.totalAmount
+  // Items 배열에서 합계 계산 (DB 값이 없을 때 폴백)
+  const total = invoice.items.length > 0
+    ? invoice.items.reduce((sum, item) => sum + (item.amount || 0), 0)
+    : invoice.totalAmount
 
   return (
     <div className="space-y-5">

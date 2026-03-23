@@ -2,9 +2,10 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Container } from '@/components/layout/container'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Download } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { InvoiceDetail } from '@/components/invoices/invoice-detail'
-import { getMockInvoiceById } from '@/lib/mock-data'
+import { PDFDownloadButton } from '@/components/invoices/pdf-download-button'
+import { fetchInvoiceById } from '@/lib/api/notion-invoices'
 import { ROUTES } from '@/lib/constants'
 
 export default async function InvoiceDetailPage({
@@ -15,8 +16,8 @@ export default async function InvoiceDetailPage({
   // Next.js 15에서 params는 Promise로 처리
   const { id } = await params
 
-  // mock-data에서 견적서 조회
-  const invoice = getMockInvoiceById(id)
+  // Notion API에서 견적서 조회
+  const invoice = await fetchInvoiceById(id)
 
   // 존재하지 않으면 404 페이지로
   if (!invoice) {
@@ -38,15 +39,13 @@ export default async function InvoiceDetailPage({
       {/* 페이지 헤더 및 PDF 다운로드 버튼 */}
       <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
         <h1 className="text-3xl font-bold">{invoice.invoiceNumber}</h1>
-        {/* PDF 다운로드 버튼 (Phase 3에서 기능 구현) */}
-        <Button className="gap-2 sm:self-start" disabled>
-          <Download className="h-4 w-4" />
-          PDF 다운로드
-        </Button>
+        <PDFDownloadButton invoice={invoice} />
       </div>
 
-      {/* InvoiceDetail 컴포넌트로 상세 정보 렌더링 */}
-      <InvoiceDetail invoice={invoice} />
+      {/* InvoiceDetail 컴포넌트로 상세 정보 렌더링 (PDF 캡처용) */}
+      <div id="invoice-print-layout" className="mb-8">
+        <InvoiceDetail invoice={invoice} />
+      </div>
 
       {/* 하단 목록으로 돌아가기 링크 */}
       <div className="mt-8 flex justify-center">

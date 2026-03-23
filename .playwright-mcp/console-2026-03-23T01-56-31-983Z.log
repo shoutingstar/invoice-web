@@ -1,0 +1,24 @@
+[     435ms] [ERROR] %c%s%c Failed to fetch invoices from Notion: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   {error: Notion API 에러: 400 - Invalid request URL., databaseId: 3290c1003d2e80719b84000bf5751195, hasApiKey: true} @ http://localhost:3010/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
+[     436ms] [ERROR] %c%s%c Failed to fetch invoice stats: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   Error: 견적서 목록을 조회할 수 없습니다. (Notion API 에러: 400 - Invalid request URL.)
+    at fetchInvoices (about://React/Server/C:%5CUsers%5CLEE%5Cworkspace%5Ccourses%5Cinvoice-web%5C.next%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__dc4f5639._.js?96:782:15)
+    at fetchInvoiceStats (about://React/Server/C:%5CUsers%5CLEE%5Cworkspace%5Ccourses%5Cinvoice-web%5C.next%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__dc4f5639._.js?94:814:24)
+    at Promise.all (<anonymous>:1:20)
+    at DashboardPage (about://React/Server/C:%5CUsers%5CLEE%5Cworkspace%5Ccourses%5Cinvoice-web%5C.next%5Cserver%5Cchunks%5Cssr%5C%5Broot-of-the-server%5D__dc4f5639._.js?95:959:43)
+    at resolveErrorDev (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4265:48)
+    at getOutlinedModel (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:3871:28)
+    at parseModelString (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:3990:50)
+    at Object.<anonymous> (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4597:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:3568:30)
+    at getOutlinedModel (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:3825:17)
+    at parseModelString (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4044:50)
+    at Array.<anonymous> (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4597:51)
+    at JSON.parse (<anonymous>)
+    at initializeModelChunk (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:3568:30)
+    at resolveConsoleEntry (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4382:96)
+    at processFullStringRow (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4532:17)
+    at processFullBinaryRow (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4472:9)
+    at processBinaryChunk (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4581:98)
+    at progress (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:4747:25) @ http://localhost:3010/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
+[     441ms] [ERROR] %c%s%c Failed to fetch invoices from Notion: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   {error: Notion API 에러: 400 - Invalid request URL., databaseId: 3290c1003d2e80719b84000bf5751195, hasApiKey: true} @ http://localhost:3010/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
+[     441ms] [ERROR] %c%s%c Failed to fetch dashboard data: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   견적서 목록을 조회할 수 없습니다. (Notion API 에러: 400 - Invalid request URL.) @ http://localhost:3010/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359

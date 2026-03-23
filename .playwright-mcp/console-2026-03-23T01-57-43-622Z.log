@@ -1,0 +1,62 @@
+[     586ms] [ERROR] %c%s%c Failed to fetch invoices from Notion: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   {error: Notion API 에러: 400 - Invalid request URL., databaseId: 3290c1003d2e80719b84000bf5751195, hasApiKey: true} @ http://localhost:3010/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
+[     587ms] [ERROR] %c%s%c Failed to fetch invoices from Notion: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   {error: Notion API 에러: 400 - Invalid request URL., databaseId: 3290c1003d2e80719b84000bf5751195, hasApiKey: true} @ http://localhost:3010/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
+[   12516ms] [ERROR] %c%s%c Failed to fetch invoices from Notion: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   {error: Notion API 에러: 400 - Invalid request URL., databaseId: 3290c1003d2e80719b84000bf5751195, hasApiKey: true} @ http://localhost:3010/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
+[   12621ms] [ERROR] %o
+
+%s Error: A <Select.Item /> must have a value prop that is not an empty string. This is because the Select value can be set to an empty string to clear the selection and show the placeholder.
+    at SelectItem (http://localhost:3010/_next/static/chunks/node_modules_465d253a._.js:8072:15)
+    at Object.react_stack_bottom_frame (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:13072:24)
+    at renderWithHooks (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:4091:24)
+    at updateForwardRef (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:5342:21)
+    at beginWork (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6186:24)
+    at runWithFiberInDEV (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:886:74)
+    at performUnitOfWork (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8298:97)
+    at workLoopSync (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8190:40)
+    at renderRootSync (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8173:13)
+    at performWorkOnRoot (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:7932:56)
+    at performSyncWorkOnRoot (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8890:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8809:316)
+    at flushSpawnedWork (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8586:13)
+    at commitRoot (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8447:13)
+    at commitRootWhenReady (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8005:9)
+    at performWorkOnRoot (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:7983:25)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8882:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:2601:64) The above error occurred in the <SelectItem> component. It was handled by the <ErrorBoundaryHandler> error boundary. @ http://localhost:3010/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:1247
+[   12624ms] [ERROR] 견적서 목록 에러: Error: A <Select.Item /> must have a value prop that is not an empty string. This is because the Select value can be set to an empty string to clear the selection and show the placeholder.
+    at SelectItem (http://localhost:3010/_next/static/chunks/node_modules_465d253a._.js:8072:15)
+    at Object.react_stack_bottom_frame (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:13072:24)
+    at renderWithHooks (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:4091:24)
+    at updateForwardRef (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:5342:21)
+    at beginWork (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6186:24)
+    at runWithFiberInDEV (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:886:74)
+    at performUnitOfWork (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8298:97)
+    at workLoopSync (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8190:40)
+    at renderRootSync (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8173:13)
+    at performWorkOnRoot (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:7932:56)
+    at performSyncWorkOnRoot (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8890:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8809:316)
+    at flushSpawnedWork (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8586:13)
+    at commitRoot (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8447:13)
+    at commitRootWhenReady (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8005:9)
+    at performWorkOnRoot (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:7983:25)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8882:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:2601:64) @ http://localhost:3010/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
+[   12625ms] [ERROR] 견적서 목록 에러: Error: A <Select.Item /> must have a value prop that is not an empty string. This is because the Select value can be set to an empty string to clear the selection and show the placeholder.
+    at SelectItem (http://localhost:3010/_next/static/chunks/node_modules_465d253a._.js:8072:15)
+    at Object.react_stack_bottom_frame (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:13072:24)
+    at renderWithHooks (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:4091:24)
+    at updateForwardRef (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:5342:21)
+    at beginWork (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6186:24)
+    at runWithFiberInDEV (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:886:74)
+    at performUnitOfWork (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8298:97)
+    at workLoopSync (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8190:40)
+    at renderRootSync (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8173:13)
+    at performWorkOnRoot (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:7932:56)
+    at performSyncWorkOnRoot (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8890:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8809:316)
+    at flushSpawnedWork (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8586:13)
+    at commitRoot (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8447:13)
+    at commitRootWhenReady (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8005:9)
+    at performWorkOnRoot (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:7983:25)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8882:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3010/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:2601:64) @ http://localhost:3010/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
