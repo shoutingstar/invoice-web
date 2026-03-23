@@ -1,0 +1,10 @@
+[     418ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/invoices/3290c100-3d2e-8049-ba8a-f62e1911ce5f:0
+[     484ms] Error: Minified React error #418; visit https://react.dev/errors/418?args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at rw (http://localhost:3000/_next/static/chunks/11b72e6951b82767.js:1:42536)
+    at oD (http://localhost:3000/_next/static/chunks/11b72e6951b82767.js:1:91628)
+    at ui (http://localhost:3000/_next/static/chunks/11b72e6951b82767.js:1:120125)
+    at http://localhost:3000/_next/static/chunks/11b72e6951b82767.js:1:119970
+    at uo (http://localhost:3000/_next/static/chunks/11b72e6951b82767.js:1:119978)
+    at i9 (http://localhost:3000/_next/static/chunks/11b72e6951b82767.js:1:116408)
+    at uD (http://localhost:3000/_next/static/chunks/11b72e6951b82767.js:1:137644)
+    at MessagePort.C (http://localhost:3000/_next/static/chunks/11b72e6951b82767.js:1:3092)

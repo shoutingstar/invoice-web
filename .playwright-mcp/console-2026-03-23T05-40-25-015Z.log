@@ -1,0 +1,9 @@
+[    5155ms] [ERROR] PDF 다운로드 오류: Error: WinAnsi cannot encode "년" (0xb144)
+    at Encoding.encodeUnicodeCodePoint (http://localhost:5555/_next/static/chunks/node_modules_%40pdf-lib_standard-fonts_es_86c1be59._.js:252:23)
+    at StandardFontEmbedder.encodeTextAsGlyphs (http://localhost:5555/_next/static/chunks/node_modules_pdf-lib_es_core_59e03e27._.js:3417:41)
+    at StandardFontEmbedder.encodeText (http://localhost:5555/_next/static/chunks/node_modules_pdf-lib_es_core_59e03e27._.js:3357:27)
+    at PDFFont.encodeText (http://localhost:5555/_next/static/chunks/node_modules_pdf-lib_es_api_99fe5314._.js:2780:30)
+    at PDFPage.drawText (http://localhost:5555/_next/static/chunks/node_modules_pdf-lib_es_api_99fe5314._.js:10090:41)
+    at http://localhost:5555/_next/static/chunks/src_0891fb81._.js:363:22
+    at Array.forEach (<anonymous>)
+    at handleDownloadPDF (http://localhost:5555/_next/static/chunks/src_0891fb81._.js:362:23) @ http://localhost:5555/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359

@@ -1,0 +1,2 @@
+[    6540ms] [ERROR] PDF 다운로드 오류: TypeError: Cannot read properties of undefined (reading 'vfs')
+    at handleDownloadPDF (http://localhost:5555/_next/static/chunks/_0c507890._.js:318:44) @ http://localhost:5555/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359

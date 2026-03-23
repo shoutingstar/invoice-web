@@ -3,8 +3,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Download, Loader2 } from 'lucide-react'
-import html2canvas from 'html2canvas'
-import { jsPDF } from 'jspdf'
 import type { Invoice } from '@/lib/types/invoice'
 
 interface PDFDownloadButtonProps {
@@ -13,7 +11,7 @@ interface PDFDownloadButtonProps {
 
 /**
  * 견적서를 PDF로 다운로드하는 버튼
- * DOM을 캡처하여 PDF 생성
+ * 서버 사이드 pdfkit을 사용하여 PDF 생성 (한글 지원)
  */
 export function PDFDownloadButton({ invoice }: PDFDownloadButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
@@ -22,54 +20,28 @@ export function PDFDownloadButton({ invoice }: PDFDownloadButtonProps) {
     try {
       setIsLoading(true)
 
-      // 인쇄용 콘텐츠 영역 찾기
-      const printContent = document.getElementById('invoice-print-layout')
-      if (!printContent) {
-        alert('PDF 콘텐츠를 찾을 수 없습니다.')
-        return
+      // API에서 PDF 다운로드
+      const response = await fetch(`/api/invoices/${invoice.id}/pdf`)
+
+      if (!response.ok) {
+        throw new Error('PDF 생성에 실패했습니다.')
       }
 
-      // DOM을 캔버스로 변환
-      const canvas = await html2canvas(printContent, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
-      })
+      // PDF Blob으로 변환
+      const blob = await response.blob()
 
-      // PDF 생성 (A4 크기)
-      const pdf = new jsPDF({
-        format: 'a4',
-        orientation: 'portrait',
-      })
-
-      const pdfWidth = pdf.internal.pageSize.getWidth()
-      const pdfHeight = pdf.internal.pageSize.getHeight()
-
-      const imgData = canvas.toDataURL('image/png')
-      const imgWidth = pdfWidth
-      const imgHeight = (canvas.height * pdfWidth) / canvas.width
-
-      let heightLeft = imgHeight
-      let position = 0
-
-      // 여러 페이지에 걸쳐 이미지 추가
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-      heightLeft -= pdfHeight
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight
-        pdf.addPage()
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-        heightLeft -= pdfHeight
-      }
-
-      // 파일명: 견적서_[견적번호]_[작성날짜].pdf
-      const fileName = `견적서_${invoice.invoiceNumber}_${invoice.createdDate}.pdf`
-      pdf.save(fileName)
+      // 다운로드 링크 생성 및 클릭
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `견적서_${invoice.invoiceNumber}_${invoice.createdDate}.pdf`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
     } catch (error) {
-      console.error('PDF 생성 실패:', error)
-      alert('PDF 생성에 실패했습니다.')
+      console.error('PDF 다운로드 오류:', error)
+      alert('PDF 다운로드에 실패했습니다.')
     } finally {
       setIsLoading(false)
     }
@@ -79,14 +51,19 @@ export function PDFDownloadButton({ invoice }: PDFDownloadButtonProps) {
     <Button
       onClick={handleDownloadPDF}
       disabled={isLoading}
-      className="gap-2 sm:self-start"
+      className="gap-2 sm:self-start print:hidden"
     >
       {isLoading ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
+        <>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          생성 중...
+        </>
       ) : (
-        <Download className="h-4 w-4" />
+        <>
+          <Download className="h-4 w-4" />
+          PDF 다운로드
+        </>
       )}
-      {isLoading ? 'PDF 생성 중...' : 'PDF 다운로드'}
     </Button>
   )
 }

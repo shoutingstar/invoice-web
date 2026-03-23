@@ -1,0 +1,6 @@
+[    5577ms] [ERROR] PDF 다운로드 오류: Error: `red` must be at least 0 and at most 1, but was actually 255
+    at assertRange (http://localhost:5555/_next/static/chunks/node_modules_pdf-lib_es_411fdf87._.js:907:15)
+    at rgb (http://localhost:5555/_next/static/chunks/node_modules_pdf-lib_es_api_99fe5314._.js:598:179)
+    at http://localhost:5555/_next/static/chunks/src_0891fb81._.js:391:188
+    at Array.forEach (<anonymous>)
+    at handleDownloadPDF (http://localhost:5555/_next/static/chunks/src_0891fb81._.js:386:21) @ http://localhost:5555/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
