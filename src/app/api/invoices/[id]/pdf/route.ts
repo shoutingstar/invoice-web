@@ -1,115 +1,184 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server'
-import { PDFDocument, rgb } from 'pdf-lib'
 
 import { fetchInvoiceById } from '@/lib/api/notion-invoices'
 import { formatAmount, formatDate } from '@/lib/format-utils'
 
-// pdf-lib를 사용한 PDF 생성 (간단하고 안정적)
-async function createPDFBuffer(invoice: any): Promise<Uint8Array> {
-  try {
-    // PDF 문서 생성
-    const pdfDoc = await PDFDocument.create()
-    const page = pdfDoc.addPage([595, 842])
+// HTML 기반 PDF 생성 (클라이언트사이드 html2pdf.js 사용)
+function createPrintableHTML(invoice: any): string {
+  const total =
+    invoice.items && invoice.items.length > 0
+      ? invoice.items.reduce(
+          (sum: number, item: any) => sum + (item.amount || 0),
+          0
+        )
+      : invoice.totalAmount || 0
 
-    const black = rgb(0, 0, 0)
-    const darkBlue = rgb(0.1, 0.2, 0.6)
-    const margin = 40
-    let yPos = 800
+  const itemsHTML = (invoice.items || [])
+    .map(
+      (item: any) =>
+        `<tr>
+          <td class="item-name">${item.itemName}</td>
+          <td class="item-qty">${item.quantity}</td>
+          <td class="item-amount">${formatAmount(item.amount)}</td>
+        </tr>`
+    )
+    .join('')
 
-    // 제목
-    page.drawText('견적서', {
-      x: margin,
-      y: yPos,
-      size: 28,
-      color: darkBlue,
-    })
+  return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>견적서 - ${invoice.invoiceNumber}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "맑은 고딕", sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    .invoice-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 32px;
+      color: #1e40af;
+      margin-bottom: 10px;
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 15px;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 30px 0;
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .meta-label {
+      font-weight: 600;
+      color: #666;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .meta-value {
+      font-size: 16px;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 30px 0;
+    }
+    thead {
+      background: #f3f4f6;
+      border-bottom: 2px solid #2563eb;
+    }
+    th {
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      color: #1e40af;
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .item-qty, .item-amount { text-align: right; }
+    .total-row {
+      background: #eff6ff;
+      border-top: 2px solid #2563eb;
+      border-bottom: 2px solid #2563eb;
+      font-weight: 600;
+    }
+    .total-row td { padding: 16px 12px; }
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e7eb;
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+    }
+    @media print {
+      body { background: white; padding: 0; }
+      .invoice-container { max-width: 100%; margin: 0; padding: 20mm; box-shadow: none; }
+    }
+  </style>
+</head>
+<body id="invoice-content">
+  <div class="invoice-container">
+    <h1>📋 견적서</h1>
 
-    yPos -= 50
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">견적 번호</div>
+        <div class="meta-value">${invoice.invoiceNumber}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">작성 날짜</div>
+        <div class="meta-value">${formatDate(invoice.createdDate)}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">고객사명</div>
+        <div class="meta-value">${invoice.customerName}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">상태</div>
+        <div class="meta-value">${invoice.status}</div>
+      </div>
+    </div>
 
-    // 견적 번호
-    page.drawText(`견적 번호: ${invoice.invoiceNumber || ''}`, {
-      x: margin,
-      y: yPos,
-      size: 12,
-      color: black,
-    })
+    <table>
+      <thead>
+        <tr>
+          <th>항목명</th>
+          <th>수량</th>
+          <th>금액</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${itemsHTML}
+        <tr class="total-row">
+          <td colspan="2">합계</td>
+          <td class="item-amount">${formatAmount(total)}</td>
+        </tr>
+      </tbody>
+    </table>
 
-    yPos -= 30
+    <footer>
+      <p>이 견적서는 ${formatDate(invoice.createdDate)}에 작성되었습니다.</p>
+      <p>© 2026 Invoice Web Service</p>
+    </footer>
+  </div>
 
-    // 고객사명
-    page.drawText(`고객사: ${invoice.customerName || ''}`, {
-      x: margin,
-      y: yPos,
-      size: 12,
-      color: black,
-    })
-
-    yPos -= 30
-
-    // 작성 날짜
-    page.drawText(`작성 날짜: ${formatDate(invoice.createdDate)}`, {
-      x: margin,
-      y: yPos,
-      size: 12,
-      color: black,
-    })
-
-    yPos -= 50
-
-    // 항목 제목
-    page.drawText('항목 목록', {
-      x: margin,
-      y: yPos,
-      size: 14,
-      color: darkBlue,
-    })
-
-    yPos -= 30
-
-    // 항목
-    const items = invoice.items || []
-    items.forEach((item: any) => {
-      const itemText = `${item.itemName || ''} x${item.quantity || 0} = ${formatAmount(item.amount || 0)}`
-      page.drawText(itemText, {
-        x: margin + 20,
-        y: yPos,
-        size: 11,
-        color: black,
-      })
-      yPos -= 25
-    })
-
-    yPos -= 20
-
-    // 합계
-    const total =
-      items.length > 0
-        ? items.reduce((sum: number, item: any) => sum + (item.amount || 0), 0)
-        : invoice.totalAmount || 0
-
-    page.drawText('---', {
-      x: margin,
-      y: yPos,
-      size: 11,
-      color: black,
-    })
-
-    yPos -= 25
-
-    page.drawText(`합계: ${formatAmount(total)}`, {
-      x: margin,
-      y: yPos,
-      size: 14,
-      color: darkBlue,
-    })
-
-    // PDF 저장 및 바이트 반환
-    return await pdfDoc.save()
-  } catch (error) {
-    console.error('[createPDFBuffer] Error:', error)
-    throw error
-  }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"><\/script>
+  <script>
+    // 페이지 로드 후 자동으로 PDF 다운로드
+    window.addEventListener('load', () => {
+      const element = document.getElementById('invoice-content');
+      const opt = {
+        margin: 10,
+        filename: 'invoice.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+      };
+      html2pdf().set(opt).from(element).save();
+    });
+  </script>
+</body>
+</html>`
 }
 
 export async function GET(
@@ -118,18 +187,10 @@ export async function GET(
 ) {
   try {
     const { id } = await params
-    console.log('[PDF API] Starting PDF generation for invoice:', id)
+    console.log('[PDF API] Fetching invoice:', id)
 
     // 견적서 데이터 조회
-    let invoice
-    try {
-      invoice = await fetchInvoiceById(id)
-      console.log('[PDF API] Invoice fetched:', invoice?.invoiceNumber)
-    } catch (fetchError) {
-      console.error('[PDF API] Fetch error:', fetchError)
-      throw new Error(`Failed to fetch invoice: ${String(fetchError)}`)
-    }
-
+    const invoice = await fetchInvoiceById(id)
     if (!invoice) {
       return NextResponse.json(
         { error: '견적서를 찾을 수 없습니다.' },
@@ -137,32 +198,21 @@ export async function GET(
       )
     }
 
-    // PDF 생성 (pdf-lib 사용)
-    console.log('[PDF API] Creating PDF buffer...')
-    let pdfBytes
-    try {
-      pdfBytes = await createPDFBuffer(invoice)
-      console.log('[PDF API] PDF created:', pdfBytes.length, 'bytes')
-    } catch (createError) {
-      console.error('[PDF API] Create error:', createError)
-      throw new Error(`Failed to create PDF: ${String(createError)}`)
-    }
+    console.log('[PDF API] Invoice found:', invoice.invoiceNumber)
 
-    // Buffer로 변환
-    const pdfBuffer = Buffer.from(pdfBytes)
+    // HTML 생성 (클라이언트사이드 html2pdf.js로 PDF 변환)
+    const html = createPrintableHTML(invoice)
 
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(html, {
       headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="invoice_${invoice.invoiceNumber}.pdf"`,
+        'Content-Type': 'text/html; charset=utf-8',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
       },
     })
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error)
-    console.error('[PDF API] Error:', errorMessage, error)
+    console.error('[PDF API] Error:', error)
     return NextResponse.json(
-      { error: 'PDF 생성에 실패했습니다.', details: errorMessage },
+      { error: 'PDF 생성에 실패했습니다.', details: String(error) },
       { status: 500 }
     )
   }
