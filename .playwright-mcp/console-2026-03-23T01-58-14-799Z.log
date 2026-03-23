@@ -1,0 +1,9 @@
+[    1527ms] [ERROR] %c%s%c Failed to fetch invoices from Notion: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   {error: Notion API 에러: 400 - Invalid request URL., databaseId: 3290c1003d2e80719b84000bf5751195, hasApiKey: true} @ http://localhost:3010/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
+[   22663ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3010/invoices/notion-page-id-001?_rsc=pthjv:0
+[   23193ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3010/invoices/notion-page-id-001:0
+[   23661ms] Error: Jest worker encountered 2 child process exceptions, exceeding retry limit
+    at ChildProcessWorker.initialize (file://C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\compiled\jest-worker\index.js:1:11580)
+    at ChildProcessWorker._onExit (file://C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\compiled\jest-worker\index.js:1:12545)
+    at ChildProcess.emit (node:events:508:28)
+    at ChildProcess._handle.onexit (node:internal/child_process:294:12)
+    at Process.callbackTrampoline (node:internal/async_hooks:130:17)

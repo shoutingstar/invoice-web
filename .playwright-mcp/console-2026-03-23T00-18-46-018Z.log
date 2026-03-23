@@ -1,0 +1,129 @@
+[    3622ms] [ERROR] Access to fetch at 'http://localhost:3000/dashboard' (redirected from 'http://localhost:3002/login?_rsc=vusbg') from origin 'http://localhost:3002' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: Redirect is not allowed for a preflight request. @ http://localhost:3002/:0
+[    3622ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:3000/dashboard:0
+[    3623ms] [ERROR] Failed to fetch RSC payload for http://localhost:3002/login. Falling back to browser navigation. TypeError: Failed to fetch
+    at createFetch (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:2091:33)
+    at fetchServerResponse (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:2014:27)
+    at http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:3473:106
+    at Object.task (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:3201:38)
+    at PromiseQueue.processNext (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:3252:186)
+    at PromiseQueue.enqueue (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:3216:76)
+    at createLazyPrefetchEntry (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:3473:49)
+    at getOrCreatePrefetchCacheEntry (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:3420:12)
+    at navigateReducer (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:8266:82)
+    at clientReducer (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9222:61)
+    at Object.action (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9434:55)
+    at runAction (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9344:38)
+    at dispatchAction (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9398:9)
+    at Object.dispatch (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9432:40)
+    at http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:1409:29
+    at startTransition (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:4904:31)
+    at dispatch (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:1408:13)
+    at dispatchAppRouterAction (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:1392:5)
+    at dispatchNavigateAction (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9486:49)
+    at http://localhost:3002/_next/static/chunks/node_modules_812998df._.js:623:55
+    at exports.startTransition (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:1662:31)
+    at linkClicked (http://localhost:3002/_next/static/chunks/node_modules_812998df._.js:622:20)
+    at onClick (http://localhost:3002/_next/static/chunks/node_modules_812998df._.js:857:13)
+    at executeDispatch (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8965:13)
+    at runWithFiberInDEV (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:886:74)
+    at processDispatchQueue (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8991:41)
+    at http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9286:13
+    at batchedUpdates$1 (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:2211:44)
+    at dispatchEventForPluginEventSystem (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9067:9)
+    at dispatchEvent (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:11224:37)
+    at dispatchDiscreteEvent (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:11206:64) @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
+[    5509ms] [ERROR] Access to fetch at 'http://localhost:3000/dashboard' (redirected from 'http://localhost:3002/login?_rsc=vusbg') from origin 'http://localhost:3002' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: Redirect is not allowed for a preflight request. @ http://localhost:3002/:0
+[    5509ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:3000/dashboard:0
+[    5509ms] [ERROR] Failed to fetch RSC payload for http://localhost:3002/login. Falling back to browser navigation. TypeError: Failed to fetch
+    at createFetch (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:2091:33)
+    at fetchServerResponse (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:2014:27)
+    at http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:3473:106
+    at Object.task (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:3201:38)
+    at PromiseQueue.processNext (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:3252:186)
+    at PromiseQueue.enqueue (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:3216:76)
+    at createLazyPrefetchEntry (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:3473:49)
+    at getOrCreatePrefetchCacheEntry (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:3420:12)
+    at navigateReducer (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:8266:82)
+    at clientReducer (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9222:61)
+    at Object.action (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9434:55)
+    at runAction (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9344:38)
+    at dispatchAction (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9398:9)
+    at Object.dispatch (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9432:40)
+    at http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:1409:29
+    at startTransition (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:4904:31)
+    at dispatch (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:1408:13)
+    at dispatchAppRouterAction (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:1392:5)
+    at dispatchNavigateAction (http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9486:49)
+    at http://localhost:3002/_next/static/chunks/node_modules_812998df._.js:623:55
+    at exports.startTransition (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_5150ccfd._.js:1662:31)
+    at linkClicked (http://localhost:3002/_next/static/chunks/node_modules_812998df._.js:622:20)
+    at onClick (http://localhost:3002/_next/static/chunks/node_modules_812998df._.js:857:13)
+    at executeDispatch (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8965:13)
+    at runWithFiberInDEV (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:886:74)
+    at processDispatchQueue (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8991:41)
+    at http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9286:13
+    at batchedUpdates$1 (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:2211:44)
+    at dispatchEventForPluginEventSystem (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9067:9)
+    at dispatchEvent (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:11224:37)
+    at dispatchDiscreteEvent (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:11206:64) @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
+[    5513ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/dashboard:0
+[    5578ms] Error: Failed to read a RSC payload created by a development version of React on the server while using a production version on the client. Always use matching versions on the server and the client.
+    at http://localhost:3000/_next/static/chunks/743ef0792dd30de1.js:1:16777
+    at t (http://localhost:3000/_next/static/chunks/743ef0792dd30de1.js:1:17268)
+[    5579ms] Error: Failed to read a RSC payload created by a development version of React on the server while using a production version on the client. Always use matching versions on the server and the client.
+    at http://localhost:3000/_next/static/chunks/743ef0792dd30de1.js:1:16777
+    at t (http://localhost:3000/_next/static/chunks/743ef0792dd30de1.js:1:17268)
+[    8867ms] [WARNING] The resource http://localhost:3000/_next/static/chunks/2473c16c0c2f6b5f.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/dashboard:0
+[    8867ms] [WARNING] The resource http://localhost:3000/_next/static/media/797e433ab948586e-s.p.dbea232f.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/dashboard:0
+[    8867ms] [WARNING] The resource http://localhost:3000/_next/static/chunks/c399765f38fe606d.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/dashboard:0
+[    8867ms] [WARNING] The resource http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.853070df.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/dashboard:0
+[   19217ms] [ERROR] %o
+
+%s Error: A <Select.Item /> must have a value prop that is not an empty string. This is because the Select value can be set to an empty string to clear the selection and show the placeholder.
+    at SelectItem (http://localhost:3002/_next/static/chunks/node_modules_6b6ea0f5._.js:8068:15)
+    at Object.react_stack_bottom_frame (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:13072:24)
+    at renderWithHooks (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:4091:24)
+    at updateForwardRef (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:5342:21)
+    at beginWork (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6186:24)
+    at runWithFiberInDEV (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:886:74)
+    at performUnitOfWork (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8298:97)
+    at workLoopSync (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8190:40)
+    at renderRootSync (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8173:13)
+    at performWorkOnRoot (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:7932:56)
+    at performSyncWorkOnRoot (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8890:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8809:316)
+    at flushSpawnedWork (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8586:13)
+    at commitRoot (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8447:13)
+    at commitRootWhenReady (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8005:9) The above error occurred in the <SelectItem> component. It was handled by the <ErrorBoundaryHandler> error boundary. @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:1247
+[   19218ms] [ERROR] 견적서 목록 에러: Error: A <Select.Item /> must have a value prop that is not an empty string. This is because the Select value can be set to an empty string to clear the selection and show the placeholder.
+    at SelectItem (http://localhost:3002/_next/static/chunks/node_modules_6b6ea0f5._.js:8068:15)
+    at Object.react_stack_bottom_frame (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:13072:24)
+    at renderWithHooks (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:4091:24)
+    at updateForwardRef (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:5342:21)
+    at beginWork (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6186:24)
+    at runWithFiberInDEV (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:886:74)
+    at performUnitOfWork (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8298:97)
+    at workLoopSync (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8190:40)
+    at renderRootSync (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8173:13)
+    at performWorkOnRoot (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:7932:56)
+    at performSyncWorkOnRoot (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8890:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8809:316)
+    at flushSpawnedWork (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8586:13)
+    at commitRoot (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8447:13)
+    at commitRootWhenReady (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8005:9) @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359
+[   19219ms] [ERROR] 견적서 목록 에러: Error: A <Select.Item /> must have a value prop that is not an empty string. This is because the Select value can be set to an empty string to clear the selection and show the placeholder.
+    at SelectItem (http://localhost:3002/_next/static/chunks/node_modules_6b6ea0f5._.js:8068:15)
+    at Object.react_stack_bottom_frame (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:13072:24)
+    at renderWithHooks (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:4091:24)
+    at updateForwardRef (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:5342:21)
+    at beginWork (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6186:24)
+    at runWithFiberInDEV (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:886:74)
+    at performUnitOfWork (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8298:97)
+    at workLoopSync (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8190:40)
+    at renderRootSync (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8173:13)
+    at performWorkOnRoot (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:7932:56)
+    at performSyncWorkOnRoot (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8890:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8809:316)
+    at flushSpawnedWork (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8586:13)
+    at commitRoot (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8447:13)
+    at commitRootWhenReady (http://localhost:3002/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:8005:9) @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:2359

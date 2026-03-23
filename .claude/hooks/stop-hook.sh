@@ -14,8 +14,8 @@ fi
 
 # Slack 웹훅 URL 확인
 if [ -z "$SLACK_WEBHOOK_URL" ]; then
-    echo "오류: SLACK_WEBHOOK_URL이 설정되지 않았습니다." >&2
-    exit 1
+    echo "정보: SLACK_WEBHOOK_URL이 설정되지 않았으므로 알림을 건너뜁니다." >&2
+    exit 0
 fi
 
 # 프로젝트명 추출
