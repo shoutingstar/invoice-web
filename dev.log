@@ -632,3 +632,63 @@ Require stack:
   syscall: 'open',
   path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
 }
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\page\app-build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\app\\page\\app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\page\app-build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\app\\page\\app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\api\invoices\[id]\pdf\[__metadata_id__]\route\app-paths-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\app\\api\\invoices\\[id]\\pdf\\[__metadata_id__]\\route\\app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\api\invoices\[id]\pdf\[__metadata_id__]\route\app-paths-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\app\\api\\invoices\\[id]\\pdf\\[__metadata_id__]\\route\\app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}

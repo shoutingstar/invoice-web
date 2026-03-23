@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server'
 
 import { fetchInvoiceById } from '@/lib/api/notion-invoices'
 import { formatAmount, formatDate } from '@/lib/format-utils'
-import type { Invoice, InvoiceItem } from '@/lib/types/invoice'
 
 export async function GET(
   request: NextRequest,
@@ -21,7 +21,7 @@ export async function GET(
     }
 
     // HTML 생성
-    const html = generateHTML(invoice)
+    const html = generateInvoiceHTML(invoice)
 
     return new NextResponse(html, {
       headers: {
@@ -29,24 +29,26 @@ export async function GET(
       },
     })
   } catch (error) {
-    console.error('HTML 생성 오류:', error)
-    return NextResponse.json({ error: '생성에 실패했습니다.' }, { status: 500 })
+    console.error('데이터 조회 오류:', error)
+    return NextResponse.json(
+      { error: '데이터 조회에 실패했습니다.' },
+      { status: 500 }
+    )
   }
 }
 
-function generateHTML(invoice: Invoice): string {
-  // 합계 계산
+function generateInvoiceHTML(invoice: any): string {
   const total =
     invoice.items && invoice.items.length > 0
       ? invoice.items.reduce(
-          (sum: number, item: InvoiceItem) => sum + (item.amount || 0),
+          (sum: number, item: any) => sum + (item.amount || 0),
           0
         )
       : invoice.totalAmount
 
   const itemRows = invoice.items
     ?.map(
-      (item: InvoiceItem) =>
+      (item: any) =>
         `
     <tr>
       <td>${item.itemName}</td>
@@ -60,11 +62,12 @@ function generateHTML(invoice: Invoice): string {
 
   return `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invoice ${invoice.invoiceNumber}</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     * { margin: 0; padding: 0; }
     body {
@@ -111,44 +114,70 @@ function generateHTML(invoice: Invoice): string {
       color: white;
       font-weight: bold;
     }
+    #download-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #4472C4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    #download-btn:hover {
+      background-color: #3559a3;
+    }
     @media print {
       body { padding: 0; }
+      #download-btn { display: none; }
       @page { margin: 20mm; }
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Invoice: ${invoice.invoiceNumber}</h1>
-    <p><strong>Customer:</strong> ${invoice.customerName}</p>
-    <p><strong>Date:</strong> ${formatDate(invoice.createdDate)}</p>
-    <p><strong>Valid Until:</strong> ${formatDate(invoice.validUntil)}</p>
+  <div id="content">
+    <div class="header">
+      <h1>Invoice: ${invoice.invoiceNumber}</h1>
+      <p><strong>Customer:</strong> ${invoice.customerName}</p>
+      <p><strong>Date:</strong> ${formatDate(invoice.createdDate)}</p>
+      <p><strong>Valid Until:</strong> ${formatDate(invoice.validUntil)}</p>
+    </div>
+
+    <div class="title">Quote Details</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th style="text-align: center;">Qty</th>
+          <th style="text-align: right;">Unit Price</th>
+          <th style="text-align: right;">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${itemRows}
+        <tr class="total-row">
+          <td colspan="3" style="text-align: right;">Total:</td>
+          <td style="text-align: right;">${formatAmount(total)}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <div class="title">Quote Details</div>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Item</th>
-        <th style="text-align: center;">Qty</th>
-        <th style="text-align: right;">Unit Price</th>
-        <th style="text-align: right;">Amount</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${itemRows}
-      <tr class="total-row">
-        <td colspan="3" style="text-align: right;">Total:</td>
-        <td style="text-align: right;">${formatAmount(total)}</td>
-      </tr>
-    </tbody>
-  </table>
+  <button id="download-btn">PDF 다운로드</button>
 
   <script>
-    window.onload = function() {
-      window.print();
-    };
+    document.getElementById('download-btn').addEventListener('click', function() {
+      const element = document.getElementById('content');
+      const opt = {
+        margin: 10,
+        filename: 'quote_${invoice.invoiceNumber}.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+      };
+      html2pdf().set(opt).from(element).save();
+    });
   </script>
 </body>
 </html>
