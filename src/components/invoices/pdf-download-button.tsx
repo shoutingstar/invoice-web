@@ -11,7 +11,7 @@ interface PDFDownloadButtonProps {
 
 /**
  * 견적서를 PDF로 다운로드하는 버튼
- * 서버 사이드 pdfkit을 사용하여 PDF 생성 (한글 지원)
+ * html2pdf.js를 사용한 클라이언트사이드 PDF 생성 (한글 지원)
  */
 export function PDFDownloadButton({ invoice }: PDFDownloadButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
