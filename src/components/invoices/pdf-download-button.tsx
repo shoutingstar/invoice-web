@@ -20,29 +20,16 @@ export function PDFDownloadButton({ invoice }: PDFDownloadButtonProps) {
     try {
       setIsLoading(true)
 
-      // API에서 PDF 다운로드
-      const response = await fetch(`/api/invoices/${invoice.id}/pdf`)
+      // API에서 HTML을 열면 html2pdf.js가 자동으로 PDF 생성 및 다운로드
+      window.open(`/api/invoices/${invoice.id}/pdf`, '_blank')
 
-      if (!response.ok) {
-        throw new Error('PDF 생성에 실패했습니다.')
-      }
-
-      // PDF Blob으로 변환
-      const blob = await response.blob()
-
-      // 다운로드 링크 생성 및 클릭
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `견적서_${invoice.invoiceNumber}_${invoice.createdDate}.pdf`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(url)
+      // 사용자 피드백을 위해 약간 대기 후 로딩 해제
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 1500)
     } catch (error) {
       console.error('PDF 다운로드 오류:', error)
       alert('PDF 다운로드에 실패했습니다.')
-    } finally {
       setIsLoading(false)
     }
   }
