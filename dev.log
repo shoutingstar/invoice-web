@@ -2,13 +2,633 @@
 > claude-nextjs-starters@0.1.0 dev
 > next dev --turbopack
 
- ⨯ Failed to start server
-Error: listen EADDRINUSE: address already in use :::3010
-    at <unknown> (Error: listen EADDRINUSE: address already in use :::3010) {
-  code: 'EADDRINUSE',
-  errno: -4091,
-  syscall: 'listen',
-  address: '::',
-  port: 3010
+   ▲ Next.js 15.5.3 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.10.30:3000
+   - Environments: .env.local, .env
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+ ✓ Starting...
+ ✓ Compiled middleware in 235ms
+ ✓ Ready in 1182ms
+ ○ Compiling /api/invoices/[id]/pdf ...
+ ✓ Compiled /api/invoices/[id]/pdf in 1719ms
+Failed to fetch page INV-2026-001: 400
+ HEAD /api/invoices/INV-2026-001/pdf 404 in 4470ms
+Failed to fetch page notion-page-id-001: 400
+ GET /api/invoices/notion-page-id-001/pdf 200 in 131885ms
+Failed to fetch page notion-page-id-001: 400
+ GET /api/invoices/notion-page-id-001/pdf 200 in 363264ms
+ ○ Compiling /invoices/[id] ...
+ ✓ Compiled /invoices/[id] in 1617ms
+📦 Item parsing: {
+  itemName: '웹사이트 디자인',
+  quantity: 1,
+  unitPrice: 3000000,
+  amountFromDB: 0,
+  calculatedAmount: 3000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 3000000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 1 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 3000000 }
+  }
 }
-[?25h
+📦 Item parsing: {
+  itemName: '로고 제작',
+  quantity: 2,
+  unitPrice: 500000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 500000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 2 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '명함 디자인',
+  quantity: 100,
+  unitPrice: 10000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 10000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 100 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+ GET /invoices/3290c100-3d2e-8049-ba8a-f62e1911ce5f 200 in 8885ms
+ ✓ Compiled /favicon.ico in 93ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 361ms
+ ✓ Compiled /invoices in 401ms
+🔍 Notion API 요청: {
+  original: '3290c1003d2e80e2a7b3d8ad3c344811',
+  normalized: '3290c100-3d2e-80e2-a7b3-d8ad3c344811',
+  url: 'https://api.notion.com/v1/databases/3290c100-3d2e-80e2-a7b3-d8ad3c344811/query'
+}
+🔍 Notion API 요청: {
+  original: '3290c1003d2e80e2a7b3d8ad3c344811',
+  normalized: '3290c100-3d2e-80e2-a7b3-d8ad3c344811',
+  url: 'https://api.notion.com/v1/databases/3290c100-3d2e-80e2-a7b3-d8ad3c344811/query'
+}
+📦 Item parsing: {
+  itemName: '웹사이트 디자인',
+  quantity: 1,
+  unitPrice: 3000000,
+  amountFromDB: 0,
+  calculatedAmount: 3000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 3000000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 1 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 3000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '로고 제작',
+  quantity: 2,
+  unitPrice: 500000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 500000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 2 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '명함 디자인',
+  quantity: 100,
+  unitPrice: 10000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 10000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 100 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '웹사이트 디자인',
+  quantity: 1,
+  unitPrice: 3000000,
+  amountFromDB: 0,
+  calculatedAmount: 3000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 3000000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 1 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 3000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '로고 제작',
+  quantity: 2,
+  unitPrice: 500000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 500000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 2 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '명함 디자인',
+  quantity: 100,
+  unitPrice: 10000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 10000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 100 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '웹사이트 디자인',
+  quantity: 1,
+  unitPrice: 3000000,
+  amountFromDB: 0,
+  calculatedAmount: 3000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 3000000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 1 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 3000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '로고 제작',
+  quantity: 2,
+  unitPrice: 500000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 500000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 2 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '명함 디자인',
+  quantity: 100,
+  unitPrice: 10000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 10000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 100 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+ GET /invoices 200 in 1362ms
+📦 Item parsing: {
+  itemName: '웹사이트 디자인',
+  quantity: 1,
+  unitPrice: 3000000,
+  amountFromDB: 0,
+  calculatedAmount: 3000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 3000000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 1 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 3000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '로고 제작',
+  quantity: 2,
+  unitPrice: 500000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 500000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 2 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '명함 디자인',
+  quantity: 100,
+  unitPrice: 10000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 10000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 100 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+ GET /invoices/3290c100-3d2e-8049-ba8a-f62e1911ce5f 200 in 817ms
+📦 Item parsing: {
+  itemName: '웹사이트 디자인',
+  quantity: 1,
+  unitPrice: 3000000,
+  amountFromDB: 0,
+  calculatedAmount: 3000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 3000000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 1 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 3000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '로고 제작',
+  quantity: 2,
+  unitPrice: 500000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 500000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 2 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '명함 디자인',
+  quantity: 100,
+  unitPrice: 10000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 10000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 100 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+🔍 Notion API 요청: {
+  original: '3290c1003d2e80e2a7b3d8ad3c344811',
+  normalized: '3290c100-3d2e-80e2-a7b3-d8ad3c344811',
+  url: 'https://api.notion.com/v1/databases/3290c100-3d2e-80e2-a7b3-d8ad3c344811/query'
+}
+📦 Item parsing: {
+  itemName: '웹사이트 디자인',
+  quantity: 1,
+  unitPrice: 3000000,
+  amountFromDB: 0,
+  calculatedAmount: 3000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 3000000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 1 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 3000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '로고 제작',
+  quantity: 2,
+  unitPrice: 500000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 500000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 2 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '명함 디자인',
+  quantity: 100,
+  unitPrice: 10000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 10000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 100 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '웹사이트 디자인',
+  quantity: 1,
+  unitPrice: 3000000,
+  amountFromDB: 0,
+  calculatedAmount: 3000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 3000000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 1 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 3000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '로고 제작',
+  quantity: 2,
+  unitPrice: 500000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 500000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 2 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '명함 디자인',
+  quantity: 100,
+  unitPrice: 10000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 10000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 100 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+ GET /invoices 200 in 1572ms
+📦 Item parsing: {
+  itemName: '웹사이트 디자인',
+  quantity: 1,
+  unitPrice: 3000000,
+  amountFromDB: 0,
+  calculatedAmount: 3000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 3000000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 1 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 3000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '로고 제작',
+  quantity: 2,
+  unitPrice: 500000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 500000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 2 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+📦 Item parsing: {
+  itemName: '명함 디자인',
+  quantity: 100,
+  unitPrice: 10000,
+  amountFromDB: 0,
+  calculatedAmount: 1000000,
+  unitPriceRaw: { id: 'WUTc', type: 'number', number: 10000 },
+  quantityRaw: { id: 'gitU', type: 'number', number: 100 },
+  amountRaw: {
+    id: '%5DJ%3ES',
+    type: 'formula',
+    formula: { type: 'number', number: 1000000 }
+  }
+}
+ GET /invoices/3290c100-3d2e-8049-ba8a-f62e1911ce5f 200 in 1284ms
+Failed to fetch page notion-page-id-001: 400
+ GET /api/invoices/notion-page-id-001/pdf 200 in 126548ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\static\development\_buildManifest.js.tmp.ascwehjfper'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\static\\development\\_buildManifest.js.tmp.ascwehjfper'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 1348ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\static\development\_buildManifest.js.tmp.6kwsvuymk9y'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\static\\development\\_buildManifest.js.tmp.6kwsvuymk9y'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\static\development\_buildManifest.js.tmp.ascwehjfper'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\static\\development\\_buildManifest.js.tmp.ascwehjfper'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\static\development\_buildManifest.js.tmp.n3teajef4p'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\static\\development\\_buildManifest.js.tmp.n3teajef4p'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\static\development\_buildManifest.js.tmp.8duutzyrhk8'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\static\\development\\_buildManifest.js.tmp.8duutzyrhk8'
+}
+ ✓ Compiled / in 365ms
+ ⨯ Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\page.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\server\require.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\server\load-components.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\build\utils.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\build\swc\options.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\build\swc\index.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\build\next-config-ts\transpile-config.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\server\config.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\server\next.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\page.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+Error: Cannot find module '../chunks/ssr/[turbopack]_runtime.js'
+Require stack:
+- C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\page.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\server\require.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\server\load-components.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\build\utils.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\build\swc\options.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\build\swc\index.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\build\next-config-ts\transpile-config.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\server\config.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\server\next.js
+- C:\Users\LEE\workspace\courses\invoice-web\node_modules\next\dist\server\lib\start-server.js
+    at Object.<anonymous> (C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\page.js:1:7) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+ GET / 500 in 488ms
+ GET / 500 in 38ms
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\api\invoices\[id]\pdf\[__metadata_id__]\route\app-paths-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\app\\api\\invoices\\[id]\\pdf\\[__metadata_id__]\\route\\app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\api\invoices\[id]\pdf\[__metadata_id__]\route\app-paths-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\app\\api\\invoices\\[id]\\pdf\\[__metadata_id__]\\route\\app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\api\invoices\[id]\pdf\[__metadata_id__]\route\app-paths-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\app\\api\\invoices\\[id]\\pdf\\[__metadata_id__]\\route\\app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\api\invoices\[id]\pdf\[__metadata_id__]\route\app-paths-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\app\\api\\invoices\\[id]\\pdf\\[__metadata_id__]\\route\\app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\api\invoices\[id]\pdf\[__metadata_id__]\route\app-paths-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\app\\api\\invoices\\[id]\\pdf\\[__metadata_id__]\\route\\app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\api\invoices\[id]\pdf\[__metadata_id__]\route\app-paths-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\app\\api\\invoices\\[id]\\pdf\\[__metadata_id__]\\route\\app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\api\invoices\[id]\pdf\[__metadata_id__]\route\app-paths-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\app\\api\\invoices\\[id]\\pdf\\[__metadata_id__]\\route\\app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\app\api\invoices\[id]\pdf\[__metadata_id__]\route\app-paths-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\app\\api\\invoices\\[id]\\pdf\\[__metadata_id__]\\route\\app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open 'C:\Users\LEE\workspace\courses\invoice-web\.next\server\pages\_app\build-manifest.json'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\Users\\LEE\\workspace\\courses\\invoice-web\\.next\\server\\pages\\_app\\build-manifest.json'
+}
