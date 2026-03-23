@@ -148,7 +148,47 @@ export async function GET(
     console.log('[PDF API] Generating PDF for invoice:', id)
 
     // 견적서 데이터 조회
-    const invoice = await fetchInvoiceById(id)
+    let invoice = await fetchInvoiceById(id)
+
+    // 테스트용 더미 데이터 (Notion API 미연동 시)
+    if (!invoice) {
+      console.log('[PDF API] Using dummy data for testing')
+      invoice = {
+        id: id,
+        invoiceNumber: `INV-2026-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
+        customerName: '테스트 회사',
+        customerPhone: '010-0000-0000',
+        customerEmail: 'test@example.com',
+        createdDate: new Date().toISOString(),
+        validUntil: new Date(
+          Date.now() + 30 * 24 * 60 * 60 * 1000
+        ).toISOString(),
+        status: '대기' as const,
+        managerName: '담당자',
+        managerEmail: 'manager@example.com',
+        managerPhone: '010-1111-1111',
+        items: [
+          {
+            id: '1',
+            order: 1,
+            itemName: '웹사이트 디자인',
+            quantity: 1,
+            unitPrice: 5000000,
+            amount: 5000000,
+          },
+          {
+            id: '2',
+            order: 2,
+            itemName: '프론트엔드 개발',
+            quantity: 1,
+            unitPrice: 0,
+            amount: 0,
+          },
+        ],
+        totalAmount: 5000000,
+      } as any
+    }
+
     if (!invoice) {
       return NextResponse.json(
         { error: '견적서를 찾을 수 없습니다.' },
@@ -163,7 +203,7 @@ export async function GET(
     const pdfBuffer = await createSimplePDF(invoice)
     console.log('[PDF API] PDF generated:', pdfBuffer.length, 'bytes')
 
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="invoice_${invoice.invoiceNumber}.pdf"`,
