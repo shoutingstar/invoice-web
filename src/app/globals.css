@@ -120,3 +120,59 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* 인쇄 레이아웃 스타일 */
+@media print {
+  /* 헤더 숨기기 */
+  header {
+    display: none !important;
+  }
+
+  /* 페이지의 네비게이션 버튼 숨기기 */
+  [class*="print:hidden"] {
+    display: none !important;
+  }
+
+  /* 텍스트 색상을 검은색으로 통일 */
+  .text-muted-foreground,
+  dt,
+  .text-gray-500,
+  .text-gray-600,
+  .text-gray-700 {
+    color: black !important;
+  }
+
+  /* 테이블 스타일 개선 */
+  table {
+    border-collapse: collapse;
+  }
+
+  thead {
+    background-color: #f0f0f0 !important;
+  }
+
+  th {
+    color: black !important;
+    background-color: #f0f0f0 !important;
+    border: 1px solid #999 !important;
+    padding: 8px !important;
+    text-align: left;
+  }
+
+  td {
+    color: black !important;
+    border: 1px solid #ddd !important;
+    padding: 8px !important;
+  }
+
+  /* 배경색 제거 (흰색 유지) */
+  body {
+    background-color: white !important;
+  }
+
+  .card {
+    background-color: white !important;
+    border: 1px solid #ddd !important;
+    page-break-inside: avoid;
+  }
+}

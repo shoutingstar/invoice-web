@@ -26,8 +26,8 @@ export default async function InvoiceDetailPage({
 
   return (
     <Container size="md" className="py-8">
-      {/* 목록으로 돌아가기 링크 */}
-      <div className="mb-6">
+      {/* 목록으로 돌아가기 링크 (인쇄 시 숨김) */}
+      <div className="mb-6 print:hidden">
         <Link href={ROUTES.INVOICES}>
           <Button variant="ghost" size="sm" className="-ml-2 gap-2">
             <ArrowLeft className="h-4 w-4" />
@@ -39,7 +39,9 @@ export default async function InvoiceDetailPage({
       {/* 페이지 헤더 및 PDF 다운로드 버튼 */}
       <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
         <h1 className="text-3xl font-bold">{invoice.invoiceNumber}</h1>
-        <PDFDownloadButton invoice={invoice} />
+        <div className="print:hidden">
+          <PDFDownloadButton invoice={invoice} />
+        </div>
       </div>
 
       {/* InvoiceDetail 컴포넌트로 상세 정보 렌더링 (PDF 캡처용) */}
@@ -47,8 +49,8 @@ export default async function InvoiceDetailPage({
         <InvoiceDetail invoice={invoice} />
       </div>
 
-      {/* 하단 목록으로 돌아가기 링크 */}
-      <div className="mt-8 flex justify-center">
+      {/* 하단 목록으로 돌아가기 링크 (인쇄 시 숨김) */}
+      <div className="mt-8 flex justify-center print:hidden">
         <Link href={ROUTES.INVOICES}>
           <Button variant="outline" className="gap-2">
             <ArrowLeft className="h-4 w-4" />
