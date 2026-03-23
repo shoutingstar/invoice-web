@@ -111,8 +111,12 @@ function createPrintableHTML(invoice: any): string {
       text-align: center;
     }
     @media print {
+      * { margin: 0; padding: 0; }
       body { background: white; padding: 0; }
-      .invoice-container { max-width: 100%; margin: 0; padding: 20mm; box-shadow: none; }
+      .invoice-container { max-width: 100%; margin: 0; padding: 20mm; box-shadow: none; page-break-after: avoid; }
+      h1 { border-bottom: 3px solid #000; page-break-after: avoid; }
+      table { page-break-inside: avoid; }
+      tr { page-break-inside: avoid; }
     }
   </style>
 </head>
@@ -162,19 +166,12 @@ function createPrintableHTML(invoice: any): string {
     </footer>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"><\/script>
   <script>
-    // 페이지 로드 후 자동으로 PDF 다운로드
+    // 페이지 로드 후 인쇄 대화창 표시 (사용자가 "PDF로 저장" 선택)
     window.addEventListener('load', () => {
-      const element = document.getElementById('invoice-content');
-      const opt = {
-        margin: 10,
-        filename: 'invoice.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
-      };
-      html2pdf().set(opt).from(element).save();
+      setTimeout(() => {
+        window.print();
+      }, 500);
     });
   </script>
 </body>
