@@ -308,6 +308,7 @@ export async function GET(
     return new NextResponse(html, {
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
+        'Content-Disposition': 'inline', // 브라우저에서 표시 (다운로드 아님)
         'Cache-Control': 'no-cache, no-store, must-revalidate',
       },
     })
