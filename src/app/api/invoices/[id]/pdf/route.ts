@@ -4,6 +4,95 @@ import { NextRequest, NextResponse } from 'next/server'
 import { fetchInvoiceById } from '@/lib/api/notion-invoices'
 import { formatAmount, formatDate } from '@/lib/format-utils'
 
+// 간단한 PDF 생성 (텍스트 기반)
+function createSimplePDF(invoice: any): Buffer {
+  const lines: string[] = []
+
+  // PDF 헤더
+  lines.push('%PDF-1.4')
+  lines.push('1 0 obj')
+  lines.push('<< /Type /Catalog /Pages 2 0 R >>')
+  lines.push('endobj')
+  lines.push('2 0 obj')
+  lines.push('<< /Type /Pages /Kids [3 0 R] /Count 1 >>')
+  lines.push('endobj')
+  lines.push('3 0 obj')
+  lines.push(
+    '<< /Type /Page /Parent 2 0 R /Resources 4 0 R /MediaBox [0 0 612 792] /Contents 5 0 R >>'
+  )
+  lines.push('endobj')
+  lines.push('4 0 obj')
+  lines.push(
+    '<< /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> >> >>'
+  )
+  lines.push('endobj')
+
+  // PDF 컨텐츠
+  const content: string[] = []
+  content.push('BT')
+  content.push('/F1 12 Tf')
+  content.push('50 750 Td')
+  content.push(`(Invoice: ${invoice.invoiceNumber}) Tj`)
+  content.push('0 -20 Td')
+  content.push(`(Customer: ${invoice.customerName}) Tj`)
+  content.push('0 -20 Td')
+  content.push(`(Date: ${formatDate(invoice.createdDate)}) Tj`)
+  content.push('0 -30 Td')
+  content.push('/F1 10 Tf')
+
+  // 항목 목록
+  let yPos = -30
+  invoice.items?.forEach((item: any, idx: number) => {
+    content.push(`${yPos} Td`)
+    content.push(
+      `(${item.itemName} x${item.quantity} = ${formatAmount(item.amount)}) Tj`
+    )
+    yPos = -20
+  })
+
+  // 합계
+  const total =
+    invoice.items && invoice.items.length > 0
+      ? invoice.items.reduce(
+          (sum: number, item: any) => sum + (item.amount || 0),
+          0
+        )
+      : invoice.totalAmount
+
+  content.push(`${yPos + 10} Td`)
+  content.push('/F1 12 Tf')
+  content.push(`(Total: ${formatAmount(total)}) Tj`)
+  content.push('ET')
+
+  const contentStr = content.join('\n')
+  lines.push('5 0 obj')
+  lines.push(`<< /Length ${contentStr.length} >>`)
+  lines.push('stream')
+  lines.push(contentStr)
+  lines.push('endstream')
+  lines.push('endobj')
+
+  // Xref 테이블
+  const xrefPos = lines.join('\n').length
+  lines.push('xref')
+  lines.push('0 6')
+  lines.push('0000000000 65535 f')
+  lines.push('0000000009 00000 n')
+  lines.push('0000000058 00000 n')
+  lines.push('0000000115 00000 n')
+  lines.push('0000000229 00000 n')
+  lines.push(`${String(xrefPos).padStart(10, '0')} 00000 n`)
+
+  lines.push('trailer')
+  lines.push('<< /Size 6 /Root 1 0 R >>')
+  lines.push('startxref')
+  lines.push(String(xrefPos))
+  lines.push('%%EOF')
+
+  const pdfContent = lines.join('\n')
+  return Buffer.from(pdfContent, 'utf-8')
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -20,166 +109,20 @@ export async function GET(
       )
     }
 
-    // HTML 생성
-    const html = generateInvoiceHTML(invoice)
+    // PDF 생성
+    const pdfBuffer = createSimplePDF(invoice)
 
-    return new NextResponse(html, {
+    return new NextResponse(pdfBuffer, {
       headers: {
-        'Content-Type': 'text/html; charset=utf-8',
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="quote_${invoice.invoiceNumber}.pdf"`,
       },
     })
   } catch (error) {
-    console.error('데이터 조회 오류:', error)
+    console.error('PDF 생성 오류:', error)
     return NextResponse.json(
-      { error: '데이터 조회에 실패했습니다.' },
+      { error: 'PDF 생성에 실패했습니다.' },
       { status: 500 }
     )
   }
-}
-
-function generateInvoiceHTML(invoice: any): string {
-  const total =
-    invoice.items && invoice.items.length > 0
-      ? invoice.items.reduce(
-          (sum: number, item: any) => sum + (item.amount || 0),
-          0
-        )
-      : invoice.totalAmount
-
-  const itemRows = invoice.items
-    ?.map(
-      (item: any) =>
-        `
-    <tr>
-      <td>${item.itemName}</td>
-      <td style="text-align: center;">${item.quantity}</td>
-      <td style="text-align: right;">${formatAmount(item.unitPrice)}</td>
-      <td style="text-align: right;">${formatAmount(item.amount)}</td>
-    </tr>
-  `
-    )
-    .join('')
-
-  return `
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invoice ${invoice.invoiceNumber}</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <style>
-    * { margin: 0; padding: 0; }
-    body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-      background: white;
-    }
-    .header {
-      background-color: #4472C4;
-      color: white;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 4px;
-    }
-    .header h1 { font-size: 16px; margin-bottom: 8px; }
-    .header p { font-size: 12px; margin: 4px 0; }
-    .title {
-      font-size: 14px;
-      font-weight: bold;
-      margin: 20px 0 15px 0;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th {
-      background-color: #1a1a1a;
-      color: white;
-      padding: 10px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: bold;
-    }
-    td {
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-      font-size: 11px;
-    }
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    .total-row {
-      background-color: #1a1a1a;
-      color: white;
-      font-weight: bold;
-    }
-    #download-btn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #4472C4;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    #download-btn:hover {
-      background-color: #3559a3;
-    }
-    @media print {
-      body { padding: 0; }
-      #download-btn { display: none; }
-      @page { margin: 20mm; }
-    }
-  </style>
-</head>
-<body>
-  <div id="content">
-    <div class="header">
-      <h1>Invoice: ${invoice.invoiceNumber}</h1>
-      <p><strong>Customer:</strong> ${invoice.customerName}</p>
-      <p><strong>Date:</strong> ${formatDate(invoice.createdDate)}</p>
-      <p><strong>Valid Until:</strong> ${formatDate(invoice.validUntil)}</p>
-    </div>
-
-    <div class="title">Quote Details</div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Item</th>
-          <th style="text-align: center;">Qty</th>
-          <th style="text-align: right;">Unit Price</th>
-          <th style="text-align: right;">Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${itemRows}
-        <tr class="total-row">
-          <td colspan="3" style="text-align: right;">Total:</td>
-          <td style="text-align: right;">${formatAmount(total)}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <button id="download-btn">PDF 다운로드</button>
-
-  <script>
-    document.getElementById('download-btn').addEventListener('click', function() {
-      const element = document.getElementById('content');
-      const opt = {
-        margin: 10,
-        filename: 'quote_${invoice.invoiceNumber}.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
-      };
-      html2pdf().set(opt).from(element).save();
-    });
-  </script>
-</body>
-</html>
-  `
 }
