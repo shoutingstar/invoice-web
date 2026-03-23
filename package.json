@@ -38,6 +38,7 @@
     "pdf-lib": "^1.17.1",
     "pdfkit": "^0.18.0",
     "pdfmake": "^0.3.7",
+    "puppeteer": "^24.40.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.63.0",
