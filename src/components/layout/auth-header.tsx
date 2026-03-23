@@ -1,20 +1,21 @@
 /**
  * 인증 영역(auth) 전용 헤더
- * 공개 영역과 달리 사용자명과 로그아웃 버튼 표시
+ * Server Component에서 세션을 읽고 LogoutButton만 Client Component로 분리
  */
 
-'use client'
-
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { LogOut, LayoutDashboard, ChevronRight, FileText } from 'lucide-react'
+import { LogoutButton } from '@/components/layout/logout-button'
+import { LayoutDashboard, ChevronRight, FileText } from 'lucide-react'
 import { ROUTES } from '@/lib/constants'
+import { auth } from '@/auth'
 
-export function AuthHeader() {
-  const handleLogout = () => {
-    // TODO: 실제 로그아웃 처리 (Phase 3 auth actions)
-  }
+export async function AuthHeader() {
+  const session = await auth()
+  const user = session?.user
+  const userName = user?.name ?? '사용자'
+  const userEmail = user?.email ?? ''
+  const userInitial = userName.charAt(0)
 
   return (
     <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 border-b backdrop-blur">
@@ -59,7 +60,6 @@ export function AuthHeader() {
           {/* 오른쪽: 사용자 정보 + 로그아웃 */}
           <div className="flex items-center gap-2">
             {/* 사용자 정보 (sm 이상에서 표시) */}
-            {/* TODO: Phase 3 인증 연동 시 실제 사용자 데이터로 교체 */}
             <div
               className="hidden items-center gap-2 sm:flex"
               aria-label="로그인 사용자 정보"
@@ -69,28 +69,19 @@ export function AuthHeader() {
                 className="bg-muted flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold"
                 aria-hidden="true"
               >
-                김
+                {userInitial}
               </div>
               <div className="text-right">
-                <p className="text-sm leading-none font-medium">김담당</p>
+                <p className="text-sm leading-none font-medium">{userName}</p>
                 <p className="text-muted-foreground mt-0.5 text-xs">
-                  kim@company.com
+                  {userEmail}
                 </p>
               </div>
               <Separator orientation="vertical" className="ml-1 h-6" />
             </div>
 
-            {/* 로그아웃 버튼 */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleLogout}
-              aria-label="로그아웃"
-              className="text-muted-foreground hover:text-foreground gap-1.5"
-            >
-              <LogOut className="h-4 w-4" aria-hidden="true" />
-              <span className="hidden sm:inline">로그아웃</span>
-            </Button>
+            {/* 로그아웃 버튼 (Client Component) */}
+            <LogoutButton />
           </div>
         </div>
       </div>

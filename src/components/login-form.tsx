@@ -4,8 +4,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
+import { EyeIcon, EyeOffIcon, AlertCircle } from 'lucide-react'
+import { signIn } from 'next-auth/react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -24,19 +24,15 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-
-// 로그인 폼 검증 스키마
-const loginSchema = z.object({
-  email: z.string().email('유효한 이메일을 입력해주세요'),
-  password: z.string().min(8, '비밀번호는 8자 이상이어야 합니다'),
-})
-
-type LoginFormValues = z.infer<typeof loginSchema>
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { loginSchema, type LoginFormData } from '@/lib/schemas/login'
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [isPending, setIsPending] = useState(false)
 
-  const form = useForm<LoginFormValues>({
+  const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
@@ -44,10 +40,21 @@ export function LoginForm() {
     },
   })
 
-  async function onSubmit(values: LoginFormValues) {
-    // Server Action 호출 예정
-    console.log('로그인:', values)
-  }
+  const handleSubmit = form.handleSubmit(async values => {
+    setError(null)
+    setIsPending(true)
+    try {
+      await signIn('credentials', {
+        email: values.email,
+        password: values.password,
+        redirectTo: '/dashboard',
+      })
+    } catch {
+      setError('이메일 또는 비밀번호가 올바르지 않습니다')
+    } finally {
+      setIsPending(false)
+    }
+  })
 
   return (
     <Card className="mx-auto w-full max-w-md">
@@ -59,7 +66,13 @@ export function LoginForm() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
             <FormField
               control={form.control}
               name="email"
@@ -111,8 +124,8 @@ export function LoginForm() {
               )}
             />
 
-            <Button type="submit" className="w-full">
-              로그인하기
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? '로그인 중...' : '로그인하기'}
             </Button>
           </form>
         </Form>
