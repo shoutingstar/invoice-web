@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
-import PDFDocument from 'pdfkit'
-import { PassThrough } from 'stream'
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const pdfMake = require('pdfmake/build/pdfmake')
+
+// 서버 환경에서는 vfs를 동적으로 설정
+if (typeof window === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const pdfFonts = require('pdfmake/build/vfs_fonts')
+  if (pdfFonts && pdfFonts.pdfMake) {
+    pdfMake.vfs = pdfFonts.pdfMake.vfs
+  }
+}
+
 import { fetchInvoiceById } from '@/lib/api/notion-invoices'
 import { formatAmount, formatDate } from '@/lib/format-utils'
+import type { Invoice, InvoiceItem } from '@/lib/types/invoice'
 
 export async function GET(
   request: NextRequest,
@@ -23,7 +34,7 @@ export async function GET(
     // PDF 생성
     const pdfBuffer = await generatePDF(invoice)
 
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(pdfBuffer as unknown as BodyInit, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="견적서_${invoice.invoiceNumber}_${invoice.createdDate}.pdf"`,
@@ -38,119 +49,149 @@ export async function GET(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function generatePDF(invoice: any): Promise<Buffer> {
+async function generatePDF(invoice: Invoice): Promise<Buffer> {
+  // pdfmake 테이블 셀 타입
+  interface PdfTableCell {
+    text: string
+    bold?: boolean
+    color?: string
+    fillColor?: string
+    alignment?: 'left' | 'center' | 'right'
+  }
+
+  // 테이블 행 생성
+  const tableBody: Array<
+    Array<
+      | PdfTableCell
+      | string
+      | { text: string; alignment?: string; fillColor?: string }
+    >
+  > = [
+    [
+      { text: '품명', bold: true, color: 'white', fillColor: '#1a1a1a' },
+      {
+        text: '수량',
+        bold: true,
+        color: 'white',
+        fillColor: '#1a1a1a',
+        alignment: 'center',
+      },
+      {
+        text: '단가',
+        bold: true,
+        color: 'white',
+        fillColor: '#1a1a1a',
+        alignment: 'right',
+      },
+      {
+        text: '금액',
+        bold: true,
+        color: 'white',
+        fillColor: '#1a1a1a',
+        alignment: 'right',
+      },
+    ],
+  ]
+
+  // 항목 행 추가
+  invoice.items?.forEach((item: InvoiceItem) => {
+    tableBody.push([
+      item.itemName,
+      { text: String(item.quantity), alignment: 'center' },
+      { text: formatAmount(item.unitPrice), alignment: 'right' },
+      { text: formatAmount(item.amount), alignment: 'right' },
+    ])
+  })
+
+  // 합계 행 추가
+  const total =
+    invoice.items && invoice.items.length > 0
+      ? invoice.items.reduce(
+          (sum: number, item: InvoiceItem) => sum + (item.amount || 0),
+          0
+        )
+      : invoice.totalAmount
+
+  tableBody.push([
+    { text: '합계', bold: true, color: 'white', fillColor: '#1a1a1a' },
+    { text: '', fillColor: '#1a1a1a' },
+    { text: '', fillColor: '#1a1a1a' },
+    {
+      text: formatAmount(total),
+      bold: true,
+      color: 'white',
+      fillColor: '#1a1a1a',
+      alignment: 'right',
+    },
+  ])
+
+  const docDefinition = {
+    content: [
+      // 헤더 섹션
+      {
+        columns: [
+          {
+            width: '*',
+            stack: [
+              {
+                text: `견적서 번호: ${invoice.invoiceNumber}`,
+                fontSize: 14,
+                bold: true,
+              },
+              {
+                text: `고객: ${invoice.customerName}`,
+                fontSize: 12,
+                marginTop: 5,
+              },
+              {
+                text: `발행일: ${formatDate(invoice.createdDate)}`,
+                fontSize: 11,
+                marginTop: 5,
+              },
+              {
+                text: `유효기간: ${formatDate(invoice.validUntil)}`,
+                fontSize: 11,
+                marginTop: 5,
+              },
+            ],
+            fillColor: '#4472C4',
+            color: 'white',
+            padding: 15,
+          },
+        ],
+      },
+      { text: '', marginTop: 20 },
+      // 제목
+      { text: '견적 정목', fontSize: 14, bold: true, marginBottom: 10 },
+      // 테이블
+      {
+        table: {
+          headerRows: 1,
+          widths: ['*', 80, 100, 120],
+          body: tableBody,
+        },
+        marginBottom: 20,
+      },
+    ],
+    defaultStyle: {
+      font: 'Roboto',
+      fontSize: 10,
+    },
+    pageMargins: [40, 40, 40, 40],
+  }
+
   return new Promise((resolve, reject) => {
     try {
-      const passThrough = new PassThrough()
-      const buffers: Buffer[] = []
+      const doc = pdfMake.createPdf(docDefinition)
 
-      passThrough.on('data', (chunk: Buffer) => {
-        buffers.push(chunk)
-      })
-
-      passThrough.on('end', () => {
-        resolve(Buffer.concat(buffers))
-      })
-
-      passThrough.on('error', (err: Error) => {
-        reject(err)
-      })
-
-      const doc = new PDFDocument({
-        size: 'A4',
-        margin: 40,
-      })
-
-      doc.pipe(passThrough)
-
-      // 파란 헤더 박스
-      doc.rect(40, 40, 500, 100).fill('#4472C4')
-
-      // 헤더 텍스트
-      doc.fillColor('white').fontSize(14).font('Helvetica-Bold')
-      doc.text(`견적서 번호: ${invoice.invoiceNumber}`, 60, 55)
-      doc.text(`고객: ${invoice.customerName}`, 60, 75)
-      doc.text(`발행일: ${formatDate(invoice.createdDate)}`, 60, 95)
-      doc.text(`유효기간: ${formatDate(invoice.validUntil)}`, 60, 115)
-
-      // 제목
-      doc.fillColor('black').fontSize(14).font('Helvetica-Bold')
-      doc.text('견적 정목', 40, 160)
-
-      // 테이블 헤더
-      const tableTop = 190
-      const tableWidth = 520
-      const columnWidths = [150, 80, 120, 170]
-      const columnPositions = [40, 190, 270, 390]
-
-      // 헤더 배경
-      doc.rect(40, tableTop, tableWidth, 25).fill('#1a1a1a')
-
-      // 헤더 텍스트
-      doc.fillColor('white').fontSize(11).font('Helvetica-Bold')
-      doc.text('품명', columnPositions[0], tableTop + 6)
-      doc.text('수량', columnPositions[1], tableTop + 6, {
-        width: columnWidths[1],
-        align: 'center',
-      })
-      doc.text('단가', columnPositions[2], tableTop + 6, {
-        width: columnWidths[2],
-        align: 'right',
-      })
-      doc.text('금액', columnPositions[3], tableTop + 6, {
-        width: columnWidths[3],
-        align: 'right',
-      })
-
-      // 테이블 행
-      let currentY = tableTop + 25
-      doc.fillColor('white').fontSize(10).font('Helvetica')
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      invoice.items.forEach((item: any) => {
-        doc.rect(40, currentY, tableWidth, 25).fill('#1a1a1a')
-        doc.fillColor('white')
-        doc.text(item.itemName, columnPositions[0], currentY + 6)
-        doc.text(String(item.quantity), columnPositions[1], currentY + 6, {
-          width: columnWidths[1],
-          align: 'center',
-        })
-        doc.text(
-          formatAmount(item.unitPrice),
-          columnPositions[2],
-          currentY + 6,
-          {
-            width: columnWidths[2],
-            align: 'right',
-          }
-        )
-        doc.text(formatAmount(item.amount), columnPositions[3], currentY + 6, {
-          width: columnWidths[3],
-          align: 'right',
-        })
-        currentY += 25
-      })
-
-      // 합계
-      doc.rect(40, currentY, tableWidth, 25).fill('#1a1a1a')
-      const total =
-        invoice.items.length > 0
-          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            invoice.items.reduce(
-              (sum: number, item: any) => sum + (item.amount || 0),
-              0
-            )
-          : invoice.totalAmount
-
-      doc.fillColor('white').font('Helvetica-Bold')
-      doc.text('합계', columnPositions[0], currentY + 6, { width: 310 })
-      doc.text(formatAmount(total), columnPositions[3], currentY + 6, {
-        width: columnWidths[3],
-        align: 'right',
-      })
-
-      doc.end()
+      doc.getBuffer(
+        (buffer: Buffer) => {
+          resolve(buffer)
+        },
+        (error: Error) => {
+          reject(error)
+        }
+      )
     } catch (err) {
       reject(err)
     }

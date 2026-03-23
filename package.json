@@ -51,6 +51,7 @@
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/pdfkit": "^0.17.5",
+    "@types/pdfmake": "^0.3.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
