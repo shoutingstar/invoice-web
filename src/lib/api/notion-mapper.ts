@@ -30,6 +30,12 @@ export function mapNotionPageToInvoice(
 ): Invoice {
   const properties = page.properties as Record<string, any>
 
+  // 🔍 디버깅: Notion 필드 구조 로깅
+  console.log(
+    '[mapNotionPageToInvoice] Notion 필드 목록:',
+    Object.keys(properties)
+  )
+
   // 각 필드 추출 (CSV 필드명 기반) - 공통 extractText 사용
   const invoiceNumber = extractTextFromClient(
     properties['견적 번호'] || properties['invoiceNumber']
@@ -40,10 +46,15 @@ export function mapNotionPageToInvoice(
   const customerPhone = extractTextFromClient(
     properties['고객 연락처'] || properties['customerPhone']
   )
-  const customerEmail =
-    extractTextFromClient(
-      properties['고객 이메일'] || properties['customerEmail']
-    ) || ''
+  // 🔍 고객 이메일 디버깅
+  const customerEmailRaw =
+    properties['고객 이메일'] || properties['customerEmail']
+  console.log('[mapNotionPageToInvoice] 고객 이메일 필드:', {
+    hasField: !!customerEmailRaw,
+    fieldType: customerEmailRaw?.type,
+    rawValue: customerEmailRaw,
+  })
+  const customerEmail = extractTextFromClient(customerEmailRaw) || ''
   const statusRaw = extractTextFromClient(
     properties['상태'] || properties['status']
   )
@@ -59,14 +70,25 @@ export function mapNotionPageToInvoice(
   const managerName = extractTextFromClient(
     properties['담당자명'] || properties['managerName']
   )
-  const managerEmail =
-    extractTextFromClient(
-      properties['담당자 이메일'] || properties['managerEmail']
-    ) || ''
-  const managerPhone =
-    extractTextFromClient(
-      properties['담당자 연락처'] || properties['managerPhone']
-    ) || ''
+  // 🔍 담당자 이메일 디버깅
+  const managerEmailRaw =
+    properties['담당자 이메일'] || properties['managerEmail']
+  console.log('[mapNotionPageToInvoice] 담당자 이메일 필드:', {
+    hasField: !!managerEmailRaw,
+    fieldType: managerEmailRaw?.type,
+    rawValue: managerEmailRaw,
+  })
+  const managerEmail = extractTextFromClient(managerEmailRaw) || ''
+
+  // 🔍 담당자 연락처 디버깅
+  const managerPhoneRaw =
+    properties['담당자 연락처'] || properties['managerPhone']
+  console.log('[mapNotionPageToInvoice] 담당자 연락처 필드:', {
+    hasField: !!managerPhoneRaw,
+    fieldType: managerPhoneRaw?.type,
+    rawValue: managerPhoneRaw,
+  })
+  const managerPhone = extractTextFromClient(managerPhoneRaw) || ''
   const notes =
     extractTextFromClient(
       properties['특수 요청사항/비고'] || properties['notes']

@@ -87,7 +87,8 @@ export async function queryNotionDatabase(
 }
 
 /**
- * Notion 텍스트/타이틀/셀렉트 필드에서 문자열 값을 추출합니다.
+ * Notion 다양한 필드 타입에서 문자열 값을 추출합니다.
+ * 지원 타입: title, rich_text, email, phone_number, url, select, number
  */
 export function extractText(property: any): string {
   if (!property) return ''
@@ -107,6 +108,21 @@ export function extractText(property: any): string {
 
   if (property.type === 'select' && property.select?.name) {
     return property.select.name
+  }
+
+  // 🆕 email 타입
+  if (property.type === 'email' && property.email) {
+    return property.email
+  }
+
+  // 🆕 phone_number 타입
+  if (property.type === 'phone_number' && property.phone_number) {
+    return property.phone_number
+  }
+
+  // 🆕 url 타입
+  if (property.type === 'url' && property.url) {
+    return property.url
   }
 
   return ''
