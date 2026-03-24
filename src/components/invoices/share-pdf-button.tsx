@@ -45,7 +45,6 @@ export function SharePdfButton({ invoiceNumber }: SharePdfButtonProps) {
       document.body.removeChild(a)
 
       console.log('✅ PDF 다운로드 완료')
-      alert('PDF가 다운로드되었습니다!')
     } catch (error) {
       console.error('❌ PDF 다운로드 오류:', error)
       const errorMessage =
