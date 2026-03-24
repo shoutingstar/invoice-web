@@ -6,7 +6,9 @@ export default auth(req => {
   const isProtected =
     req.nextUrl.pathname.startsWith('/dashboard') ||
     req.nextUrl.pathname.startsWith('/invoices')
-  const isAuthPage = req.nextUrl.pathname.startsWith('/login')
+  const isAuthPage =
+    req.nextUrl.pathname.startsWith('/login') ||
+    req.nextUrl.pathname.startsWith('/signup')
 
   // 보호된 라우트 접근 시 미인증이면 로그인 페이지로
   if (isProtected && !isLoggedIn) {

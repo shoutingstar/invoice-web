@@ -16,7 +16,9 @@ interface InvoicesPageProps {
   }>
 }
 
-export default async function InvoicesPage({ searchParams }: InvoicesPageProps) {
+export default async function InvoicesPage({
+  searchParams,
+}: InvoicesPageProps) {
   const params = await searchParams
   const search = params.search || ''
   const status = (params.status as InvoiceStatus | undefined) || ''
@@ -40,7 +42,8 @@ export default async function InvoicesPage({ searchParams }: InvoicesPageProps) 
       limit: PAGINATION.ITEMS_PER_PAGE,
     })
   } catch (err) {
-    error = err instanceof Error ? err.message : '견적서 목록을 조회할 수 없습니다.'
+    error =
+      err instanceof Error ? err.message : '견적서 목록을 조회할 수 없습니다.'
     console.error('Failed to fetch invoices:', error)
   }
 
@@ -64,7 +67,7 @@ export default async function InvoicesPage({ searchParams }: InvoicesPageProps) 
       {/* 에러 표시 */}
       {error && (
         <section className="mb-6">
-          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4">
+          <div className="border-destructive/50 bg-destructive/10 rounded-lg border p-4">
             <p className="text-destructive text-sm">
               <strong>오류:</strong> {error}
             </p>
@@ -85,25 +88,8 @@ export default async function InvoicesPage({ searchParams }: InvoicesPageProps) 
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {result.invoices.map((invoice) => (
-                <InvoiceCard
-                  key={invoice.id}
-                  invoice={{
-                    id: invoice.id,
-                    invoiceNumber: invoice.invoiceNumber,
-                    customerName: invoice.customerName,
-                    customerPhone: invoice.customerPhone,
-                    customerEmail: invoice.customerEmail,
-                    createdDate: invoice.createdDate,
-                    validUntil: invoice.validUntil,
-                    status: invoice.status,
-                    totalAmount: invoice.totalAmount,
-                    managerName: invoice.managerName,
-                    managerEmail: invoice.managerEmail,
-                    managerPhone: invoice.managerPhone,
-                    notes: invoice.notes,
-                  }}
-                />
+              {result.invoices.map(invoice => (
+                <InvoiceCard key={invoice.id} invoice={invoice} />
               ))}
             </div>
           </>
@@ -151,7 +137,7 @@ export default async function InvoicesPage({ searchParams }: InvoicesPageProps) 
 
             <div className="flex items-center gap-1">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (pageNum) => (
+                pageNum => (
                   <Button
                     key={pageNum}
                     variant={page === pageNum ? 'default' : 'outline'}

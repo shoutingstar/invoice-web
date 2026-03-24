@@ -1,146 +1,99 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { mapNotionPageToInvoice } from './notion-mapper'
 import { fetchInvoiceItems } from './notion-items'
+import { queryNotionDatabase } from './notion-client'
 import { Invoice, InvoiceStatus } from '@/lib/types/invoice'
 import { InvoiceListResult } from '@/lib/types/api'
 import { env } from '@/lib/env'
-import { getMockInvoices, getInvoiceStats } from '@/lib/mock-data'
-
-/**
- * Notion ID를 정규화합니다 (하이픈 없음 → 하이픈 있음)
- * 예: 3290c1003d2e80e2a7b3d8ad3c344811 → 3290c100-3d2e-80e2-a7b3-d8ad3c344811
- */
-function normalizeNotionId(id: string): string {
-  const clean = id.replace(/-/g, '')
-  if (clean.length !== 32) return id
-  return `${clean.slice(0, 8)}-${clean.slice(8, 12)}-${clean.slice(12, 16)}-${clean.slice(16, 20)}-${clean.slice(20)}`
-}
-
-/**
- * Notion API를 직접 호출하여 데이터베이스를 쿼리합니다.
- */
-async function queryNotionDatabase(
-  databaseId: string,
-  filter?: any,
-  sorts?: any[]
-): Promise<any[]> {
-  if (!env.NOTION_API_KEY) {
-    throw new Error('NOTION_API_KEY 환경변수가 설정되지 않았습니다.')
-  }
-
-  const normalizedId = normalizeNotionId(databaseId)
-  console.log('🔍 Notion API 요청:', {
-    original: databaseId,
-    normalized: normalizedId,
-    url: `https://api.notion.com/v1/databases/${normalizedId}/query`,
-  })
-  const response = await fetch(
-    'https://api.notion.com/v1/databases/' + normalizedId + '/query',
-    {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + env.NOTION_API_KEY,
-        'Notion-Version': '2022-06-28',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        filter,
-        sorts,
-        page_size: 100,
-      }),
-    }
-  )
-
-  if (!response.ok) {
-    const errorData = await response.json()
-    throw new Error(
-      `Notion API 에러: ${response.status} - ${errorData.message || '알 수 없는 에러'}`
-    )
-  }
-
-  const data = await response.json()
-  return data.results || []
-}
+import { getMockInvoices } from '@/lib/mock-data'
 
 /**
  * 모든 견적서를 조회합니다.
  * MVP 규모이므로 전체 조회 후 앱에서 필터링/페이지네이션합니다.
+ *
+ * 주의: 상태 필터는 Notion API 필터 타입 호환 문제로 앱 레벨에서만 처리합니다.
+ * (Notion API에서 "database property status does not match filter type" 에러 발생)
+ *
+ * @param options.includeItems 항목 데이터 포함 여부 (기본값: false, 목록 조회 성능 최적화)
  */
 export async function fetchInvoices(options?: {
   search?: string
   status?: InvoiceStatus | ''
   page?: number
   limit?: number
+  includeItems?: boolean
 }): Promise<InvoiceListResult> {
-  const { search = '', status = '', page = 1, limit = 10 } = options || {}
+  const {
+    search = '',
+    status = '',
+    page = 1,
+    limit = 10,
+    includeItems = false,
+  } = options || {}
 
   try {
     if (!env.NOTION_DATABASE_ID) {
       throw new Error('NOTION_DATABASE_ID 환경변수가 설정되지 않았습니다.')
     }
 
-    // Notion 필터 구성 (검색만 Notion API에서 처리)
-    const filters: any[] = []
-
-    // 검색 필터 (고객사명 또는 견적 번호)
-    if (search) {
-      filters.push({
-        or: [
-          {
-            property: '고객사명',
-            rich_text: {
-              contains: search,
+    // 검색 필터 구성 (고객사명 또는 견적 번호)
+    // 상태 필터는 Notion API 호환 문제로 앱 레벨에서 처리
+    const filter = search
+      ? {
+          or: [
+            {
+              property: '고객사명',
+              rich_text: { contains: search },
             },
-          },
-          {
-            property: '견적 번호',
-            title: {
-              contains: search,
+            {
+              property: '견적 번호',
+              title: { contains: search },
             },
-          },
-        ],
-      })
-    }
+          ],
+        }
+      : undefined
 
-    // 데이터베이스 쿼리 (상태 필터는 앱 레벨에서 처리)
-    const results = await queryNotionDatabase(
-      env.NOTION_DATABASE_ID,
-      filters.length > 0 ? filters[0] : undefined,
-      [
-        {
-          property: '작성 날짜',
-          direction: 'descending',
-        },
-      ]
-    )
+    const results = await queryNotionDatabase(env.NOTION_DATABASE_ID, filter, [
+      { property: '작성 날짜', direction: 'descending' },
+    ])
 
-    // 각 페이지에 대해 항목들을 병렬 조회
+    // 항목 조회 (includeItems가 true일 때만)
     const invoices = await Promise.all(
-      results.map(async (page: any) => {
+      results.map(async (page: Record<string, unknown>) => {
+        const pageId = (page as { id: string }).id
         try {
-          const items = await fetchInvoiceItems(page.id)
-          return mapNotionPageToInvoice(page, items)
+          const items = includeItems ? await fetchInvoiceItems(pageId) : []
+          return mapNotionPageToInvoice(
+            page as Parameters<typeof mapNotionPageToInvoice>[0],
+            items
+          )
         } catch (error) {
           // 항목 조회 실패는 무시하고 빈 배열로 처리
-          console.warn(`Failed to fetch items for invoice ${page.id}:`, error)
-          return mapNotionPageToInvoice(page, [])
+          console.warn(`Failed to fetch items for invoice ${pageId}:`, error)
+          return mapNotionPageToInvoice(
+            page as Parameters<typeof mapNotionPageToInvoice>[0],
+            []
+          )
         }
       })
     )
 
-    // 앱에서 페이지네이션 (심플함)
+    // 앱 레벨 상태 필터링
+    const filtered = status
+      ? invoices.filter(inv => inv.status === status)
+      : invoices
+
+    // 앱 레벨 페이지네이션
     const startIdx = (page - 1) * limit
     const endIdx = startIdx + limit
-    const paginatedInvoices = invoices.slice(startIdx, endIdx)
+    const paginatedInvoices = filtered.slice(startIdx, endIdx)
 
     return {
       invoices: paginatedInvoices,
-      total: invoices.length,
+      total: filtered.length,
       page,
       limit,
-      hasMore: endIdx < invoices.length,
-      nextCursor: endIdx < invoices.length ? String(page + 1) : undefined,
+      hasMore: endIdx < filtered.length,
+      nextCursor: endIdx < filtered.length ? String(page + 1) : undefined,
     }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error)
@@ -185,7 +138,7 @@ export async function fetchInvoices(options?: {
 }
 
 /**
- * 특정 ID의 견적서를 조회합니다.
+ * 특정 ID의 견적서를 조회합니다. (항목 데이터 포함)
  */
 export async function fetchInvoiceById(id: string): Promise<Invoice | null> {
   try {
@@ -211,12 +164,11 @@ export async function fetchInvoiceById(id: string): Promise<Invoice | null> {
 
     const page = await response.json()
 
-    // 항목들 조회
+    // 상세 페이지에서는 항목 데이터 포함
     const items = await fetchInvoiceItems(id)
 
     return mapNotionPageToInvoice(page, items)
   } catch (error) {
-    // 404 또는 권한 오류
     console.error(`Failed to fetch invoice ${id}:`, error)
     // Mock 데이터로 페일오버
     const mockInvoices = getMockInvoices()
@@ -228,31 +180,36 @@ export async function fetchInvoiceById(id: string): Promise<Invoice | null> {
  * 견적서 통계를 조회합니다.
  * - 전체 견적서 수
  * - 상태별 개수 (대기, 승인완료, 발송완료, 작성중)
+ *
+ * 주의: 통계 조회 시 항목 데이터는 불필요하므로 includeItems: false로 최적화합니다.
  */
 export async function fetchInvoiceStats(): Promise<{
   total: number
   byStatus: Record<InvoiceStatus, number>
 }> {
   try {
-    const result = await fetchInvoices({ limit: 1000 })
+    // 항목 데이터 제외하고 전체 견적서만 조회
+    const result = await fetchInvoices({ limit: 1000, includeItems: false })
 
-    const stats = {
-      total: result.total,
-      byStatus: {
-        대기: 0,
-        승인완료: 0,
-        발송완료: 0,
-        작성중: 0,
-      } as Record<InvoiceStatus, number>,
+    const byStatus: Record<InvoiceStatus, number> = {
+      대기: 0,
+      승인완료: 0,
+      발송완료: 0,
+      작성중: 0,
     }
 
     // 상태별 집계
     result.invoices.forEach((invoice: Invoice) => {
       const status = invoice.status as InvoiceStatus
-      stats.byStatus[status]++
+      if (status in byStatus) {
+        byStatus[status]++
+      }
     })
 
-    return stats
+    return {
+      total: result.total,
+      byStatus,
+    }
   } catch (error) {
     console.error('Failed to fetch invoice stats:', error)
     return {

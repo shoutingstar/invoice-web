@@ -2,6 +2,7 @@
 
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints'
 import { Invoice, InvoiceStatus, InvoiceItem } from '@/lib/types/invoice'
+import { extractText as extractTextFromClient } from './notion-client'
 
 // Notion 상태값 → 앱 상태값 매핑 (CSV 기반 한글 상태값 사용)
 const NOTION_STATUS_MAP: Record<string, InvoiceStatus> = {
@@ -29,22 +30,51 @@ export function mapNotionPageToInvoice(
 ): Invoice {
   const properties = page.properties as Record<string, any>
 
-  // 각 필드 추출 (CSV 필드명 기반)
-  const invoiceNumber = extractText(properties['견적 번호'] || properties['invoiceNumber'])
-  const customerName = extractText(properties['고객사명'] || properties['customerName'])
-  const customerPhone = extractText(properties['고객 연락처'] || properties['customerPhone'])
-  const customerEmail = extractText(properties['고객 이메일'] || properties['customerEmail']) || ''
-  const statusRaw = extractText(properties['상태'] || properties['status'])
-  const amountRaw = extractText(properties['합계 금액'] || properties['totalAmount'])
-  const createdDateRaw = extractDate(properties['작성 날짜'] || properties['createdDate'])
-  const validUntilRaw = extractDate(properties['유효기간'] || properties['validUntil'])
-  const managerName = extractText(properties['담당자명'] || properties['managerName'])
-  const managerEmail = extractText(properties['담당자 이메일'] || properties['managerEmail']) || ''
-  const managerPhone = extractText(properties['담당자 연락처'] || properties['managerPhone']) || ''
-  const notes = extractText(properties['특수 요청사항/비고'] || properties['notes']) || ''
+  // 각 필드 추출 (CSV 필드명 기반) - 공통 extractText 사용
+  const invoiceNumber = extractTextFromClient(
+    properties['견적 번호'] || properties['invoiceNumber']
+  )
+  const customerName = extractTextFromClient(
+    properties['고객사명'] || properties['customerName']
+  )
+  const customerPhone = extractTextFromClient(
+    properties['고객 연락처'] || properties['customerPhone']
+  )
+  const customerEmail =
+    extractTextFromClient(
+      properties['고객 이메일'] || properties['customerEmail']
+    ) || ''
+  const statusRaw = extractTextFromClient(
+    properties['상태'] || properties['status']
+  )
+  const amountRaw = extractTextFromClient(
+    properties['합계 금액'] || properties['totalAmount']
+  )
+  const createdDateRaw = extractDate(
+    properties['작성 날짜'] || properties['createdDate']
+  )
+  const validUntilRaw = extractDate(
+    properties['유효기간'] || properties['validUntil']
+  )
+  const managerName = extractTextFromClient(
+    properties['담당자명'] || properties['managerName']
+  )
+  const managerEmail =
+    extractTextFromClient(
+      properties['담당자 이메일'] || properties['managerEmail']
+    ) || ''
+  const managerPhone =
+    extractTextFromClient(
+      properties['담당자 연락처'] || properties['managerPhone']
+    ) || ''
+  const notes =
+    extractTextFromClient(
+      properties['특수 요청사항/비고'] || properties['notes']
+    ) || ''
 
   // 상태값 변환 (매퍼 사용)
-  const status: InvoiceStatus = NOTION_STATUS_MAP[statusRaw] || ('대기' as InvoiceStatus)
+  const status: InvoiceStatus =
+    NOTION_STATUS_MAP[statusRaw] || ('대기' as InvoiceStatus)
 
   // 금액 파싱 (₩5,000,000 → 5000000)
   const totalAmount = parseAmount(amountRaw)
@@ -63,7 +93,8 @@ export function mapNotionPageToInvoice(
   // 날짜 처리
   const createdDate = createdDateRaw || new Date().toISOString().split('T')[0]
   const validUntil =
-    validUntilRaw || (() => {
+    validUntilRaw ||
+    (() => {
       const date = new Date(createdDate)
       date.setDate(date.getDate() + 30)
       return date.toISOString().split('T')[0]
@@ -85,33 +116,6 @@ export function mapNotionPageToInvoice(
     notes,
     items,
   }
-}
-
-/**
- * Notion 텍스트 필드에서 값을 추출합니다.
- * number 타입도 지원 (금액 필드용)
- */
-function extractText(property: any): string {
-  if (!property) return ''
-
-  // number 타입 (금액 필드가 number일 경우)
-  if (property.type === 'number' && property.number !== null) {
-    return String(property.number)
-  }
-
-  if (property.type === 'title' && property.title?.[0]) {
-    return property.title[0].plain_text || ''
-  }
-
-  if (property.type === 'rich_text' && property.rich_text?.[0]) {
-    return property.rich_text[0].plain_text || ''
-  }
-
-  if (property.type === 'select' && property.select?.name) {
-    return property.select.name
-  }
-
-  return ''
 }
 
 /**
@@ -145,7 +149,7 @@ function extractDate(property: any): string {
 
   // rich_text 타입 (한글 날짜)
   if (property.type === 'rich_text' || property.type === 'formula') {
-    const text = extractText(property)
+    const text = extractTextFromClient(property)
     if (text) {
       return parseKoreanDate(text)
     }

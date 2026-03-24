@@ -57,18 +57,8 @@ export default async function DashboardPage() {
   const userName =
     session?.user?.name || session?.user?.email?.split('@')[0] || '사용자'
 
-  // Notion API에서 데이터 조회
-  type StatsType = {
-    total: number
-    byStatus: {
-      대기: number
-      승인완료: number
-      발송완료: number
-      작성중: number
-    }
-  }
-
-  let stats: StatsType = {
+  // 통계 초기값 (API 실패 대비)
+  let stats: Awaited<ReturnType<typeof fetchInvoiceStats>> = {
     total: 0,
     byStatus: {
       대기: 0,
@@ -221,24 +211,7 @@ export default async function DashboardPage() {
 
         <div className="grid gap-4">
           {recentInvoices.map(invoice => (
-            <InvoiceCard
-              key={invoice.id}
-              invoice={{
-                id: invoice.id,
-                invoiceNumber: invoice.invoiceNumber,
-                customerName: invoice.customerName,
-                customerPhone: invoice.customerPhone,
-                customerEmail: invoice.customerEmail,
-                createdDate: invoice.createdDate,
-                validUntil: invoice.validUntil,
-                status: invoice.status,
-                totalAmount: invoice.totalAmount,
-                managerName: invoice.managerName,
-                managerEmail: invoice.managerEmail,
-                managerPhone: invoice.managerPhone,
-                notes: invoice.notes,
-              }}
-            />
+            <InvoiceCard key={invoice.id} invoice={invoice} />
           ))}
         </div>
       </section>

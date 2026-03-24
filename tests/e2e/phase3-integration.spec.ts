@@ -29,8 +29,6 @@ test.describe('Phase 3 통합 테스트 - 전체 플로우', () => {
     // 환영 메시지 확인
     await expect(page.locator('h1')).toContainText('안녕하세요')
 
-    // 통계 카드 4개 확인
-    const statCards = page.locator('[class*="grid"]').first().locator('[class*="card"], [class*="Card"]')
     // 통계 카드 존재 확인 (최소 1개 이상)
     await expect(page.locator('text=전체 견적서')).toBeVisible()
     await expect(page.locator('text=대기 중')).toBeVisible()
@@ -45,7 +43,9 @@ test.describe('Phase 3 통합 테스트 - 전체 플로우', () => {
     await expect(errorAlert).not.toBeVisible()
   })
 
-  test('T2: 견적서 목록 페이지 - 데이터 로드 및 검색 기능', async ({ page }) => {
+  test('T2: 견적서 목록 페이지 - 데이터 로드 및 검색 기능', async ({
+    page,
+  }) => {
     // 견적서 목록 페이지 접속
     await page.goto(`${BASE_URL}/invoices`)
     await expect(page).toHaveTitle(/견적서/)
@@ -60,7 +60,9 @@ test.describe('Phase 3 통합 테스트 - 전체 플로우', () => {
     await expect(page.locator('select')).toBeVisible()
 
     // 견적서 카드 또는 EmptyState 확인
-    const invoiceCards = page.locator('[class*="invoice"], [class*="card"]').first()
+    const invoiceCards = page
+      .locator('[class*="invoice"], [class*="card"]')
+      .first()
     const emptyState = page.locator('text=견적서가 없습니다')
 
     // 둘 중 하나는 있어야 함
@@ -109,11 +111,15 @@ test.describe('Phase 3 통합 테스트 - 전체 플로우', () => {
       await expect(invoiceNumber).toBeVisible()
 
       // PDF 다운로드 버튼 확인
-      const pdfButton = page.locator('button:has-text(/PDF|다운로드|Download/i)')
+      const pdfButton = page.locator(
+        'button:has-text(/PDF|다운로드|Download/i)'
+      )
       await expect(pdfButton).toBeEnabled()
 
       // 목록으로 돌아가기 버튼 확인
-      const backButton = page.locator('button:has-text(/목록|돌아가기|Back/i)').first()
+      const backButton = page
+        .locator('button:has-text(/목록|돌아가기|Back/i)')
+        .first()
       await expect(backButton).toBeVisible()
     }
   })
@@ -130,20 +136,24 @@ test.describe('Phase 3 통합 테스트 - 전체 플로우', () => {
       await firstInvoiceLink.click()
       await page.waitForLoadState('networkidle')
 
-      // PDF 다운로드 버튼 클릭
-      const downloadPromise = context.waitForEvent('download')
-      const pdfButton = page.locator('button:has-text(/PDF|다운로드|Download/i)')
-      await pdfButton.click()
+      // PDF 다운로드 버튼 확인 (html2pdf.js 방식 - window.open으로 새 탭 열림)
+      const pdfButton = page.locator(
+        'button:has-text(/PDF|다운로드|Download/i)'
+      )
+      await expect(pdfButton).toBeEnabled()
 
-      // 다운로드 완료 대기
-      const download = await downloadPromise
+      // 새 탭이 열리는 것을 대기
+      const [newPage] = await Promise.all([
+        context.waitForEvent('page'),
+        pdfButton.click(),
+      ])
 
-      // 파일명 확인
-      const filename = download.suggestedFilename()
-      expect(filename).toMatch(/견적서_.*\.pdf$/)
+      // 새 탭 URL이 PDF API 경로인지 확인
+      const newPageUrl = newPage.url()
+      expect(newPageUrl).toContain('/api/invoices/')
+      expect(newPageUrl).toContain('/pdf')
 
-      // 파일 경로 확인
-      expect(filename).toBeTruthy()
+      await newPage.close()
     }
   })
 

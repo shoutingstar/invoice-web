@@ -180,7 +180,7 @@ function createPrintableHTML(invoice: any): string {
 <body>
     <div id="invoice-content">
         <div class="header">
-            <h1>📋 견적서</h1>
+            <h1>견적서</h1>
         </div>
 
         <div class="meta-grid">
