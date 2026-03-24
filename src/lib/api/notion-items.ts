@@ -46,6 +46,12 @@ export async function fetchInvoiceItems(invoiceId: string): Promise<any[]> {
 
     // 각 항목을 객체로 변환 (CSV 필드명 기반)
     const items = results.map((page: any) => {
+      // 🔍 디버깅: 실제 필드명 확인
+      console.log(
+        '[fetchInvoiceItems] 항목 필드 목록:',
+        Object.keys(page.properties)
+      )
+
       const quantity = extractNumber(
         page.properties['수량'] || page.properties['quantity']
       )
@@ -57,13 +63,22 @@ export async function fetchInvoiceItems(invoiceId: string): Promise<any[]> {
       )
       const calculatedAmount = quantity * unitPrice
 
+      // 🔍 품명 필드 디버깅
+      const itemNameField =
+        page.properties['품명'] ||
+        page.properties['품명/서비스명'] ||
+        page.properties['itemName'] ||
+        page.properties['item_name']
+      const itemNameValue = extractText(itemNameField)
+      console.log('[fetchInvoiceItems] 품명:', itemNameValue)
+
       return {
         id: page.id,
-        itemName: extractText(
-          page.properties['품명/서비스명'] || page.properties['itemName']
-        ),
+        itemName: itemNameValue,
         description: extractText(
-          page.properties['상세 설명'] || page.properties['description']
+          page.properties['상세 설명'] ||
+            page.properties['설명'] ||
+            page.properties['description']
         ),
         quantity,
         unitPrice,
