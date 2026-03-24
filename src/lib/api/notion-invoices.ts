@@ -80,18 +80,8 @@ export async function fetchInvoices(options?: {
       throw new Error('NOTION_DATABASE_ID 환경변수가 설정되지 않았습니다.')
     }
 
-    // Notion 필터 구성
+    // Notion 필터 구성 (검색만 Notion API에서 처리)
     const filters: any[] = []
-
-    // 상태 필터 (select 또는 rich_text로 처리)
-    if (status) {
-      filters.push({
-        property: '상태',
-        rich_text: {
-          contains: status,
-        },
-      })
-    }
 
     // 검색 필터 (고객사명 또는 견적 번호)
     if (search) {
@@ -113,14 +103,10 @@ export async function fetchInvoices(options?: {
       })
     }
 
-    // 데이터베이스 쿼리
+    // 데이터베이스 쿼리 (상태 필터는 앱 레벨에서 처리)
     const results = await queryNotionDatabase(
       env.NOTION_DATABASE_ID,
-      filters.length === 1
-        ? filters[0]
-        : filters.length > 1
-          ? { and: filters }
-          : undefined,
+      filters.length > 0 ? filters[0] : undefined,
       [
         {
           property: '작성 날짜',
