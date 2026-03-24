@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/providers/theme-provider'
@@ -28,9 +29,9 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <head>
         {/* html2pdf.js 라이브러리 - PDF 다운로드용 */}
-        <script
+        <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
-          defer
+          strategy="beforeInteractive"
         />
       </head>
       <body

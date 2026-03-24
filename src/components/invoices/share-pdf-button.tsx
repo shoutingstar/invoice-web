@@ -12,7 +12,21 @@ interface SharePdfButtonProps {
 export function SharePdfButton({ invoiceNumber }: SharePdfButtonProps) {
   const handleDownloadPdf = () => {
     const element = document.getElementById('invoice-detail-container')
-    if (element) {
+    if (!element) {
+      alert('견적서를 찾을 수 없습니다.')
+      return
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const htmlToPdf = (window as any).html2pdf
+    if (!htmlToPdf) {
+      alert(
+        'PDF 라이브러리가 아직 로드되지 않았습니다. 잠시 후 다시 시도해주세요.'
+      )
+      return
+    }
+
+    try {
       const opt = {
         margin: 10,
         filename: `${invoiceNumber}.pdf`,
@@ -20,10 +34,10 @@ export function SharePdfButton({ invoiceNumber }: SharePdfButtonProps) {
         html2canvas: { scale: 2 },
         jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' },
       }
-      // html2pdf.js 글로벌 변수 사용
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const htmlToPdf = (window as any).html2pdf
       htmlToPdf().set(opt).from(element).save()
+    } catch (error) {
+      console.error('PDF 다운로드 오류:', error)
+      alert('PDF 다운로드 중 오류가 발생했습니다.')
     }
   }
 
