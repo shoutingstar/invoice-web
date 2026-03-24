@@ -2,10 +2,11 @@
 
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
+import { useParams } from 'next/navigation'
 
 /**
  * 공유 페이지용 PDF 다운로드 버튼
- * Client Component로 구현되어 onClick 핸들러 사용 가능
+ * 서버 사이드에서 Puppeteer로 PDF 생성
  */
 
 interface SharePdfButtonProps {
@@ -14,53 +15,39 @@ interface SharePdfButtonProps {
 
 export function SharePdfButton({ invoiceNumber }: SharePdfButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const params = useParams()
+  const token = params.token as string
 
   const handleDownloadPdf = async () => {
     try {
       setIsLoading(true)
-      console.log('🔵 PDF 다운로드 버튼 클릭됨')
+      console.log('🔵 PDF 다운로드 시작')
 
-      const element = document.getElementById('invoice-detail-container')
-      if (!element) {
-        console.error('❌ invoice-detail-container 요소를 찾을 수 없습니다')
-        alert('견적서를 찾을 수 없습니다.')
-        return
+      // 서버 API에서 PDF 생성
+      const response = await fetch(`/api/share/${token}/pdf`)
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.message || 'PDF 생성 실패')
       }
-      console.log('✅ 견적서 요소 찾음')
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const html2pdfLib = (window as any).html2pdf
-      if (!html2pdfLib) {
-        console.error('❌ html2pdf 라이브러리를 찾을 수 없습니다')
-        alert(
-          'PDF 라이브러리가 로드되지 않았습니다. 페이지를 새로고침 후 시도해주세요.'
-        )
-        return
-      }
-      console.log('✅ html2pdf 라이브러리 로드됨')
+      console.log('✅ PDF 생성 완료')
 
-      const opt = {
-        margin: 10,
-        filename: `${invoiceNumber}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: {
-          scale: 2,
-          allowTaint: true,
-          useCORS: true,
-          logging: false,
-        },
-        jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' },
-      }
-      console.log('📋 PDF 옵션:', opt)
-      console.log('⏳ PDF 생성 중...')
-
-      // html2pdf는 체인 가능한 API 제공
-      await html2pdfLib().set(opt).from(element).save()
+      // Blob을 다운로드
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${invoiceNumber}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
 
       console.log('✅ PDF 다운로드 완료')
       alert('PDF가 다운로드되었습니다!')
     } catch (error) {
-      console.error('❌ PDF 생성 오류:', error)
+      console.error('❌ PDF 다운로드 오류:', error)
       const errorMessage =
         error instanceof Error ? error.message : String(error)
       alert(`PDF 다운로드 중 오류가 발생했습니다: ${errorMessage}`)
