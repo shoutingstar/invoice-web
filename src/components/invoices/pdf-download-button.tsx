@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Download, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import type { Invoice } from '@/lib/types/invoice'
 
 interface PDFDownloadButtonProps {
@@ -11,34 +10,54 @@ interface PDFDownloadButtonProps {
 
 /**
  * 견적서를 PDF로 다운로드하는 버튼
- * html2pdf.js를 사용한 클라이언트사이드 PDF 생성 (한글 지원)
+ * 서버 사이드에서 Puppeteer로 PDF 생성
  */
 export function PDFDownloadButton({ invoice }: PDFDownloadButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleDownloadPDF = async () => {
+  const handleDownloadPdf = async () => {
     try {
       setIsLoading(true)
+      console.log('🔵 PDF 다운로드 시작')
 
-      // API에서 HTML을 열면 html2pdf.js가 자동으로 PDF 생성 및 다운로드
-      window.open(`/api/invoices/${invoice.id}/pdf`, '_blank')
+      // 서버 API에서 PDF 생성
+      const response = await fetch(`/api/invoices/${invoice.id}/pdf`)
 
-      // 사용자 피드백을 위해 약간 대기 후 로딩 해제
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 1500)
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.message || 'PDF 생성 실패')
+      }
+
+      console.log('✅ PDF 생성 완료')
+
+      // Blob을 다운로드
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${invoice.invoiceNumber}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+
+      console.log('✅ PDF 다운로드 완료')
+      alert('PDF가 다운로드되었습니다!')
     } catch (error) {
-      console.error('PDF 다운로드 오류:', error)
-      alert('PDF 다운로드에 실패했습니다.')
+      console.error('❌ PDF 다운로드 오류:', error)
+      const errorMessage =
+        error instanceof Error ? error.message : String(error)
+      alert(`PDF 다운로드 중 오류가 발생했습니다: ${errorMessage}`)
+    } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <Button
-      onClick={handleDownloadPDF}
+    <button
+      onClick={handleDownloadPdf}
       disabled={isLoading}
-      className="gap-2 sm:self-start print:hidden"
+      className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 print:hidden"
     >
       {isLoading ? (
         <>
@@ -46,11 +65,8 @@ export function PDFDownloadButton({ invoice }: PDFDownloadButtonProps) {
           생성 중...
         </>
       ) : (
-        <>
-          <Download className="h-4 w-4" />
-          PDF 다운로드
-        </>
+        <>📥 PDF 다운로드</>
       )}
-    </Button>
+    </button>
   )
 }

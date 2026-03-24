@@ -1,325 +1,350 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server'
-
+import puppeteer from 'puppeteer'
+import { auth } from '@/auth'
 import { fetchInvoiceById } from '@/lib/api/notion-invoices'
 import { formatAmount, formatDate } from '@/lib/format-utils'
 
-// HTML 기반 PDF 렌더링 (클라이언트사이드에서 html2pdf.js로 자동 변환)
-function createPrintableHTML(invoice: any): string {
-  const items = invoice.items || []
-  const total =
-    items.length > 0
-      ? items.reduce((sum: number, item: any) => sum + (item.amount || 0), 0)
-      : invoice.totalAmount || 0
-
-  const itemsHTML = items
-    .map(
-      (item: any) =>
-        `<tr>
-          <td>${item.itemName || ''}</td>
-          <td class="text-center">${item.quantity || 0}</td>
-          <td class="text-right">${formatAmount(item.amount || 0)}</td>
-        </tr>`
-    )
-    .join('')
-
-  return `<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>견적서 - ${invoice.invoiceNumber}</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f5f5f5;
-            padding: 20px;
-        }
-
-        #invoice-content {
-            background: white;
-            padding: 40px;
-            margin: 0 auto;
-            max-width: 800px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 3px solid #1e40af;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            font-size: 32px;
-            color: #1e40af;
-            font-weight: bold;
-        }
-
-        .meta-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .meta-label {
-            font-size: 12px;
-            color: #666;
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-
-        .meta-value {
-            font-size: 14px;
-            color: #333;
-            font-weight: 600;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-        }
-
-        thead {
-            background: #f8f9fa;
-            border-top: 2px solid #2563eb;
-            border-bottom: 2px solid #2563eb;
-        }
-
-        th {
-            padding: 12px;
-            text-align: left;
-            font-size: 13px;
-            font-weight: 600;
-            color: #1e40af;
-        }
-
-        td {
-            padding: 12px;
-            font-size: 13px;
-            color: #333;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .text-right {
-            text-align: right;
-        }
-
-        .total-row {
-            background: #f0f4f8;
-            font-weight: 600;
-            color: #1e40af;
-            border-top: 2px solid #2563eb;
-            border-bottom: 2px solid #2563eb;
-        }
-
-        .total-row td {
-            padding: 16px 12px;
-        }
-
-        .footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #e5e7eb;
-            text-align: center;
-            color: #666;
-            font-size: 12px;
-        }
-
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-
-            #invoice-content {
-                box-shadow: none;
-                max-width: 100%;
-                padding: 0;
-            }
-
-            .header {
-                border-bottom: 2px solid #000;
-            }
-
-            th, .total-row {
-                border-color: #000;
-            }
-
-            tr:hover {
-                background: white;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div id="invoice-content">
-        <div class="header">
-            <h1>견적서</h1>
-        </div>
-
-        <div class="meta-grid">
-            <div class="meta-item">
-                <div class="meta-label">견적 번호</div>
-                <div class="meta-value">${invoice.invoiceNumber || ''}</div>
-            </div>
-            <div class="meta-item">
-                <div class="meta-label">작성 날짜</div>
-                <div class="meta-value">${formatDate(invoice.createdDate)}</div>
-            </div>
-            <div class="meta-item">
-                <div class="meta-label">고객사명</div>
-                <div class="meta-value">${invoice.customerName || ''}</div>
-            </div>
-            <div class="meta-item">
-                <div class="meta-label">상태</div>
-                <div class="meta-value">${invoice.status || ''}</div>
-            </div>
-        </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>항목</th>
-                    <th class="text-center">수량</th>
-                    <th class="text-right">금액</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${itemsHTML}
-                <tr class="total-row">
-                    <td colspan="2">합계</td>
-                    <td class="text-right">${formatAmount(total)}</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="footer">
-            <p>Generated on ${formatDate(invoice.createdDate)}</p>
-            <p>© 2026 Invoice Web Service</p>
-        </div>
-    </div>
-
-    <script>
-        window.addEventListener('load', () => {
-            const element = document.getElementById('invoice-content');
-            const opt = {
-                margin: 10,
-                filename: 'invoice_${invoice.invoiceNumber}.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
-            };
-            html2pdf().set(opt).from(element).save();
-        });
-    </script>
-</body>
-</html>`
-}
-
+/**
+ * 견적서 PDF 다운로드
+ * GET /api/invoices/[id]/pdf
+ * Puppeteer 서버사이드 PDF 생성
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params
-    console.log('[PDF API] Generating printable HTML for invoice:', id)
 
-    // 견적서 데이터 조회
-    let invoice = await fetchInvoiceById(id)
-
-    // 테스트용 더미 데이터 (Notion API 미연동 시)
-    if (!invoice) {
-      console.log('[PDF API] Using dummy data for testing')
-      invoice = {
-        id: id,
-        invoiceNumber: `INV-2026-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
-        customerName: '테스트 회사',
-        customerPhone: '010-0000-0000',
-        customerEmail: 'test@example.com',
-        createdDate: new Date().toISOString(),
-        validUntil: new Date(
-          Date.now() + 30 * 24 * 60 * 60 * 1000
-        ).toISOString(),
-        status: '대기' as const,
-        managerName: '담당자',
-        managerEmail: 'manager@example.com',
-        managerPhone: '010-1111-1111',
-        items: [
-          {
-            id: '1',
-            order: 1,
-            itemName: '웹사이트 디자인',
-            quantity: 1,
-            unitPrice: 5000000,
-            amount: 5000000,
-          },
-          {
-            id: '2',
-            order: 2,
-            itemName: '프론트엔드 개발',
-            quantity: 1,
-            unitPrice: 0,
-            amount: 0,
-          },
-        ],
-        totalAmount: 5000000,
-      } as any
+    // 인증 확인
+    const session = await auth()
+    if (!session) {
+      return NextResponse.json({ error: '인증이 필요합니다' }, { status: 401 })
     }
+
+    // 견적서 조회
+    const invoice = await fetchInvoiceById(id)
 
     if (!invoice) {
       return NextResponse.json(
-        { error: '견적서를 찾을 수 없습니다.' },
+        { error: '견적서를 찾을 수 없습니다' },
         { status: 404 }
       )
     }
 
-    console.log('[PDF API] Invoice found:', invoice.invoiceNumber)
+    // HTML 생성
+    const html = generatePdfHtml(invoice)
 
-    // HTML 생성 (클라이언트에서 html2pdf.js로 자동 PDF 변환)
-    console.log('[PDF API] Creating printable HTML...')
-    const html = createPrintableHTML(invoice)
+    // Puppeteer로 PDF 생성
+    const pdf = await generatePdf(html)
 
-    return new NextResponse(html, {
+    // PDF 반환
+    return new NextResponse(new Uint8Array(pdf), {
       headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Content-Disposition': 'inline', // 브라우저에서 표시 (다운로드 아님)
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${invoice.invoiceNumber}.pdf"`,
         'Cache-Control': 'no-cache, no-store, must-revalidate',
       },
     })
   } catch (error) {
-    console.error('[PDF API] Error:', error)
+    console.error('❌ PDF 생성 중 오류:', error)
     return NextResponse.json(
       {
-        error: 'PDF 생성에 실패했습니다.',
-        details: String(error),
+        error: 'PDF 생성 중 오류가 발생했습니다',
+        message: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }
     )
+  }
+}
+
+interface Invoice {
+  invoiceNumber: string
+  customerName?: string
+  customerPhone?: string
+  customerEmail?: string
+  status?: string
+  createdDate?: string
+  validUntil?: string
+  totalAmount?: number
+  items?: InvoiceItem[]
+  specialRequests?: string
+}
+
+interface InvoiceItem {
+  itemName?: string
+  description?: string
+  quantity?: number
+  unitPrice?: number
+  amount?: number
+}
+
+/**
+ * 견적서 HTML 생성
+ */
+function generatePdfHtml(invoice: Invoice): string {
+  const items = invoice.items || []
+  const totalAmount = invoice.totalAmount || 0
+
+  return `
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${invoice.invoiceNumber} - 견적서</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: white;
+      color: #000;
+      line-height: 1.6;
+      padding: 40px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .header {
+      margin-bottom: 40px;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #1a1a1a;
+    }
+    .header p {
+      color: #666;
+      font-size: 14px;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #ddd;
+    }
+    .info-group h3 {
+      font-size: 12px;
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .info-group p {
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    .table-wrapper {
+      margin-bottom: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th {
+      background: #f5f5f5;
+      padding: 12px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      border-bottom: 2px solid #ddd;
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+      color: #555;
+    }
+    .amount {
+      text-align: right;
+      font-family: monospace;
+    }
+    .summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 40px;
+      padding-top: 20px;
+    }
+    .summary-section {
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+    .summary-section h3 {
+      font-size: 13px;
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .total-amount {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1a1a1a;
+      font-family: monospace;
+    }
+    .note-section {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+    .note-section h3 {
+      font-size: 13px;
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .note-section p {
+      font-size: 14px;
+      color: #555;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>${invoice.invoiceNumber}</h1>
+      <p>견적서</p>
+    </div>
+
+    <!-- Info Grid -->
+    <div class="info-grid">
+      <div>
+        <div class="info-group">
+          <h3>고객사명</h3>
+          <p>${invoice.customerName || '-'}</p>
+        </div>
+        <div class="info-group">
+          <h3>고객 연락처</h3>
+          <p>${invoice.customerPhone || '-'}</p>
+        </div>
+        <div class="info-group">
+          <h3>고객 이메일</h3>
+          <p>${invoice.customerEmail || '-'}</p>
+        </div>
+      </div>
+      <div>
+        <div class="info-group">
+          <h3>상태</h3>
+          <p>${invoice.status || '-'}</p>
+        </div>
+        <div class="info-group">
+          <h3>작성 날짜</h3>
+          <p>${invoice.createdDate ? formatDate(invoice.createdDate) : '-'}</p>
+        </div>
+        <div class="info-group">
+          <h3>유효기간</h3>
+          <p>${invoice.validUntil || '-'}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items Table -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 50%">설명</th>
+            <th style="width: 15%; text-align: right">수량</th>
+            <th style="width: 15%; text-align: right">단가</th>
+            <th style="width: 20%; text-align: right">합계</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items
+            .map(
+              (item: InvoiceItem) => `
+          <tr>
+            <td>${item.itemName || '-'}</td>
+            <td class="amount">${item.quantity || '-'}</td>
+            <td class="amount">${item.unitPrice ? formatAmount(item.unitPrice) : '-'}</td>
+            <td class="amount">${item.amount ? formatAmount(item.amount) : '-'}</td>
+          </tr>
+          `
+            )
+            .join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+      <div></div>
+      <div class="summary-section">
+        <h3>합계 금액</h3>
+        <div class="total-amount">${formatAmount(totalAmount)}</div>
+      </div>
+    </div>
+
+    ${
+      invoice.specialRequests
+        ? `
+    <div class="note-section">
+      <h3>특수 요청사항/비고</h3>
+      <p>${invoice.specialRequests}</p>
+    </div>
+    `
+        : ''
+    }
+  </div>
+</body>
+</html>
+`
+}
+
+/**
+ * Puppeteer로 PDF 생성
+ */
+async function generatePdf(html: string): Promise<Buffer> {
+  let browser
+  try {
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    })
+
+    const page = await browser.newPage()
+
+    // HTML 로드
+    await page.setContent(html, {
+      waitUntil: 'networkidle0',
+      timeout: 30000,
+    })
+
+    // PDF 생성
+    const pdf = await page.pdf({
+      format: 'A4',
+      margin: {
+        top: '10mm',
+        right: '10mm',
+        bottom: '10mm',
+        left: '10mm',
+      },
+      printBackground: true,
+    })
+
+    await page.close()
+
+    return Buffer.from(pdf)
+  } finally {
+    if (browser) {
+      await browser.close()
+    }
   }
 }
