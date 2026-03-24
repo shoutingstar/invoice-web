@@ -43,7 +43,12 @@ export function SharePdfButton({ invoiceNumber }: SharePdfButtonProps) {
         margin: 10,
         filename: `${invoiceNumber}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
+        html2canvas: {
+          scale: 2,
+          allowTaint: true,
+          useCORS: true,
+          logging: false,
+        },
         jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' },
       }
       console.log('📋 PDF 옵션:', opt)
