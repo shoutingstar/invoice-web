@@ -3,7 +3,13 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useCallback } from 'react'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
 import type { InvoiceStatus } from '@/lib/types/invoice'
@@ -17,7 +23,10 @@ interface InvoiceFilterProps {
  * 견적서 목록 필터 컴포넌트
  * URL search params를 사용하여 검색/필터 상태 관리
  */
-export function InvoiceFilter({ defaultSearch = '', defaultStatus = '' }: InvoiceFilterProps) {
+export function InvoiceFilter({
+  defaultSearch = '',
+  defaultStatus = '',
+}: InvoiceFilterProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [search, setSearch] = useState(defaultSearch)
@@ -65,14 +74,14 @@ export function InvoiceFilter({ defaultSearch = '', defaultStatus = '' }: Invoic
   }, [router])
 
   return (
-    <div className="space-y-4 rounded-lg border border-border bg-card p-4">
+    <div className="border-border bg-card space-y-4 rounded-lg border p-4">
       <div className="flex gap-3">
         <div className="flex-1">
           <Input
             placeholder="견적서 번호 또는 고객사명 검색..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => {
+            onChange={e => setSearch(e.target.value)}
+            onKeyDown={e => {
               if (e.key === 'Enter') handleSearch()
             }}
           />

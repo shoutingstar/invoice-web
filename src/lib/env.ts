@@ -7,7 +7,10 @@ const envSchema = z.object({
   VERCEL_URL: z.string().optional(),
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
   // NextAuth.js v5 설정
-  NEXTAUTH_SECRET: z.string().optional().default('dev-secret-key-do-not-use-in-production'),
+  NEXTAUTH_SECRET: z
+    .string()
+    .optional()
+    .default('dev-secret-key-do-not-use-in-production'),
   NEXTAUTH_URL: z.string().url().optional(),
   AUTH_TEST_EMAIL: z.string().email().default('test@example.com'),
   AUTH_TEST_PASSWORD: z.string().min(8).default('password123'),

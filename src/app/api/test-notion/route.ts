@@ -3,7 +3,11 @@
  * 실제 데이터 조회 및 매핑 검증
  */
 
-import { fetchInvoices, fetchInvoiceById, fetchInvoiceStats } from '@/lib/api/notion-invoices'
+import {
+  fetchInvoices,
+  fetchInvoiceById,
+  fetchInvoiceStats,
+} from '@/lib/api/notion-invoices'
 import { env } from '@/lib/env'
 import { NextResponse } from 'next/server'
 
@@ -91,7 +95,8 @@ export async function GET(request: Request) {
       { status: 200 }
     )
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류'
+    const errorMessage =
+      error instanceof Error ? error.message : '알 수 없는 오류'
     const stack = error instanceof Error ? error.stack : ''
     console.error('[TEST-NOTION] 에러 발생:', {
       message: errorMessage,
