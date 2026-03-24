@@ -1,0 +1,11 @@
+[      65ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/dashboard:0
+[     134ms] TypeError: Cannot read properties of undefined (reading 'indexOf')
+    at getOrInstantiateModuleFromParent (file://C:\Users\LEE\workspace\courses\invoice-web\.next\server\edge\chunks\turbopack-edge-wrapper_38495f4c.js:788:28)
+    at DevContext.esmImport [as i] (file://C:\Users\LEE\workspace\courses\invoice-web\.next\server\edge\chunks\turbopack-edge-wrapper_38495f4c.js:225:20)
+    at __TURBOPACK__module__evaluation__ (file://C:\Users\LEE\workspace\courses\invoice-web\.next\server\edge\chunks\[root-of-the-server]__46f078a6._.js:13:13452)
+    at <unknown> (file://C:\Users\LEE\workspace\courses\invoice-web\.next\server\edge\chunks\turbopack-edge-wrapper_38495f4c.js:842:13)
+    at runModuleExecutionHooks (file://C:\Users\LEE\workspace\courses\invoice-web\.next\server\edge\chunks\turbopack-edge-wrapper_38495f4c.js:880:9)
+    at instantiateModule (file://C:\Users\LEE\workspace\courses\invoice-web\.next\server\edge\chunks\turbopack-edge-wrapper_38495f4c.js:840:9)
+    at getOrInstantiateModuleFromParent (file://C:\Users\LEE\workspace\courses\invoice-web\.next\server\edge\chunks\turbopack-edge-wrapper_38495f4c.js:793:12)
+    at DevContext.esmImport [as i] (file://C:\Users\LEE\workspace\courses\invoice-web\.next\server\edge\chunks\turbopack-edge-wrapper_38495f4c.js:225:20)
+    at <unknown> (file://C:\Users\LEE\workspace\courses\invoice-web\.next\server\edge\chunks\edge-wrapper_fa177864.js:1:161)

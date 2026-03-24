@@ -119,7 +119,7 @@ export default async function InvoicesPage({
       </section>
 
       {/* 페이지네이션 */}
-      {result.invoices.length > 0 && totalPages > 1 && (
+      {result.invoices.length > 0 && (
         <section aria-label="페이지 탐색">
           <nav
             aria-label={`총 ${totalPages}페이지 중 현재 ${page}페이지`}

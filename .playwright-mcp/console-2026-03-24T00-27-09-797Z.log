@@ -1,0 +1,3 @@
+[   15184ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/dashboard:0
+[   15193ms] Error: An unexpected response was received from the server.
+    at fetchServerAction (http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:9016:37)
