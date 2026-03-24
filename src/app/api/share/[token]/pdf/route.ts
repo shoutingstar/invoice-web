@@ -78,6 +78,7 @@ interface Invoice {
 }
 
 interface InvoiceItem {
+  itemName?: string
   description?: string
   quantity?: number
   unitPrice?: number
@@ -276,7 +277,7 @@ function generatePdfHtml(invoice: Invoice): string {
             .map(
               (item: InvoiceItem) => `
           <tr>
-            <td>${item.description || '-'}</td>
+            <td>${item.itemName || '-'}</td>
             <td class="amount">${item.quantity || '-'}</td>
             <td class="amount">${item.unitPrice ? formatAmount(item.unitPrice) : '-'}</td>
             <td class="amount">${item.amount ? formatAmount(item.amount) : '-'}</td>
