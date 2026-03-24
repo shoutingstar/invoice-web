@@ -14,7 +14,7 @@
  *   - "all"               : 모든 Notion 캐시 무효화
  */
 
-import { revalidateTag, revalidatePath } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 import { NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
@@ -35,36 +35,35 @@ export async function POST(request: NextRequest) {
 
     if (tag === 'all') {
       // 모든 Notion 관련 캐시 무효화
-      revalidateTag('notion-invoices')
       revalidatePath('/dashboard')
       revalidatePath('/invoices')
+      revalidatePath('/', 'layout')
       return Response.json({
         success: true,
         message: '모든 Notion 캐시를 무효화했습니다.',
-        revalidated: ['notion-invoices', '/dashboard', '/invoices'],
+        revalidated: ['/dashboard', '/invoices'],
       })
     }
 
     if (tag === 'notion-invoices') {
       // 견적서 목록 캐시 무효화
-      revalidateTag('notion-invoices')
       revalidatePath('/dashboard')
       revalidatePath('/invoices')
       return Response.json({
         success: true,
         message: '견적서 목록 캐시를 무효화했습니다.',
-        revalidated: ['notion-invoices'],
+        revalidated: ['/dashboard', '/invoices'],
       })
     }
 
     if (invoiceId) {
       // 특정 견적서 캐시 무효화
-      revalidateTag(`notion-invoice-${invoiceId}`)
       revalidatePath(`/invoices/${invoiceId}`)
+      revalidatePath('/invoices')
       return Response.json({
         success: true,
         message: `견적서 ${invoiceId} 캐시를 무효화했습니다.`,
-        revalidated: [`notion-invoice-${invoiceId}`],
+        revalidated: [`/invoices/${invoiceId}`],
       })
     }
 
