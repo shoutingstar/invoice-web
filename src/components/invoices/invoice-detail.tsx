@@ -98,11 +98,10 @@ export function InvoiceDetail({ invoice }: InvoiceDetailProps) {
               label="회사명"
               value={invoice.customerName}
             />
-            <InfoItem icon={User} label="담당자" value={invoice.managerName} />
             <InfoItem
               icon={Mail}
               label="이메일"
-              value={invoice.customerEmail}
+              value={invoice.customerEmail || '미등록'}
             />
             <InfoItem
               icon={Phone}
@@ -132,11 +131,15 @@ export function InvoiceDetail({ invoice }: InvoiceDetailProps) {
               label="담당자명"
               value={invoice.managerName}
             />
-            <InfoItem icon={Mail} label="이메일" value={invoice.managerEmail} />
+            <InfoItem
+              icon={Mail}
+              label="이메일"
+              value={invoice.managerEmail || '미등록'}
+            />
             <InfoItem
               icon={Phone}
               label="연락처"
-              value={invoice.managerPhone}
+              value={invoice.managerPhone || '미등록'}
             />
           </dl>
         </CardContent>
