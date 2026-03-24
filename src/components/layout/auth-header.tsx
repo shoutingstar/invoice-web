@@ -1,11 +1,13 @@
 /**
  * 인증 영역(auth) 전용 헤더
- * Server Component에서 세션을 읽고 LogoutButton만 Client Component로 분리
+ * Server Component에서 세션을 읽고 LogoutButton, ThemeToggle만 Client Component로 분리
  */
 
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
+import { Badge } from '@/components/ui/badge'
 import { LogoutButton } from '@/components/layout/logout-button'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { LayoutDashboard, ChevronRight, FileText } from 'lucide-react'
 import { ROUTES } from '@/lib/constants'
 import { auth } from '@/auth'
@@ -16,6 +18,8 @@ export async function AuthHeader() {
   const userName = user?.name ?? '사용자'
   const userEmail = user?.email ?? ''
   const userInitial = userName.charAt(0)
+  // 세션에서 role 읽기 (타입 선언: src/types/next-auth.d.ts)
+  const userRole = user?.role ?? 'user'
 
   return (
     <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 border-b backdrop-blur print:hidden">
@@ -57,7 +61,7 @@ export async function AuthHeader() {
             </Link>
           </div>
 
-          {/* 오른쪽: 사용자 정보 + 로그아웃 */}
+          {/* 오른쪽: 사용자 정보 + ThemeToggle + 로그아웃 */}
           <div className="flex items-center gap-2">
             {/* 사용자 정보 (sm 이상에서 표시) */}
             <div
@@ -77,8 +81,17 @@ export async function AuthHeader() {
                   {userEmail}
                 </p>
               </div>
+              {/* 관리자 역할 뱃지 */}
+              {userRole === 'admin' && (
+                <Badge variant="secondary" className="text-xs">
+                  관리자
+                </Badge>
+              )}
               <Separator orientation="vertical" className="ml-1 h-6" />
             </div>
+
+            {/* 테마 전환 버튼 (Client Component) */}
+            <ThemeToggle />
 
             {/* 로그아웃 버튼 (Client Component) */}
             <LogoutButton />

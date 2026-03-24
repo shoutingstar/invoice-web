@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { InvoiceDetail } from '@/components/invoices/invoice-detail'
 import { PDFDownloadButton } from '@/components/invoices/pdf-download-button'
+import { ShareButton } from '@/components/invoices/share-button'
 import { fetchInvoiceById } from '@/lib/api/notion-invoices'
 import { ROUTES } from '@/lib/constants'
 
@@ -63,7 +64,9 @@ export default async function InvoiceDetailPage({
       {/* 페이지 헤더 및 PDF 다운로드 버튼 */}
       <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
         <h1 className="text-3xl font-bold">{invoice.invoiceNumber}</h1>
-        <div className="print:hidden">
+        {/* PDF 다운로드 + 공유 버튼 묶음 */}
+        <div className="flex gap-2 print:hidden">
+          <ShareButton invoiceId={invoice.id} />
           <PDFDownloadButton invoice={invoice} />
         </div>
       </div>

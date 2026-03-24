@@ -18,6 +18,8 @@ import {
   CheckCircle2,
   Send,
   AlertCircle,
+  Settings,
+  Link2,
 } from 'lucide-react'
 import { InvoiceCard } from '@/components/invoices/invoice-card'
 import { fetchInvoices, fetchInvoiceStats } from '@/lib/api/notion-invoices'
@@ -62,6 +64,7 @@ export default async function DashboardPage() {
   const session = await auth()
   const userName =
     session?.user?.name || session?.user?.email?.split('@')[0] || '사용자'
+  const userRole = session?.user?.role ?? 'user'
 
   // 통계 초기값 (API 실패 대비)
   let stats: Awaited<ReturnType<typeof fetchInvoiceStats>> = {
@@ -99,6 +102,66 @@ export default async function DashboardPage() {
           오늘도 견적서 관리를 시작해 보세요.
         </p>
       </section>
+
+      {/* 관리자 전용 메뉴 섹션 */}
+      {userRole === 'admin' && (
+        <section className="mb-8">
+          <h2 className="mb-4 text-lg font-semibold">관리자 메뉴</h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {/* 공유 링크 관리 카드 */}
+            <Card className="border-blue-200 bg-blue-50 transition-shadow hover:shadow-md dark:border-blue-800 dark:bg-blue-950">
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-lg bg-blue-100 p-2 dark:bg-blue-900">
+                    <Link2 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <CardTitle className="text-base">공유 링크 관리</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-3 text-sm">
+                  클라이언트와 공유할 링크를 생성하고 관리합니다.
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  disabled
+                  title="준비 중"
+                >
+                  준비 중
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* 설정 카드 */}
+            <Card className="border-green-200 bg-green-50 transition-shadow hover:shadow-md dark:border-green-800 dark:bg-green-950">
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-lg bg-green-100 p-2 dark:bg-green-900">
+                    <Settings className="h-5 w-5 text-green-600 dark:text-green-400" />
+                  </div>
+                  <CardTitle className="text-base">설정</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-3 text-sm">
+                  Invoice Web의 기본 설정을 관리합니다.
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  disabled
+                  title="준비 중"
+                >
+                  준비 중
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+      )}
 
       {/* API 에러 표시 */}
       {apiError && (

@@ -14,7 +14,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const { email, password } = parsed.data
 
-        // 테스트 계정 검증
+        // 테스트 계정 검증 - 역할 분리
+        // 관리자 계정
         if (
           email === env.AUTH_TEST_EMAIL &&
           password === env.AUTH_TEST_PASSWORD
@@ -23,6 +24,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             id: '1',
             email,
             name: '김담당',
+            role: 'admin' as const,
+          }
+        }
+
+        // 클라이언트 계정
+        if (email === 'client@example.com' && password === 'password123') {
+          return {
+            id: '2',
+            email,
+            name: '고객사',
+            role: 'user' as const,
           }
         }
 
@@ -42,12 +54,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.id = user.id
         token.name = user.name
         token.email = user.email
+        // authorize()에서 반환한 role을 JWT에 저장
+        token.role = user.role ?? 'user'
       }
       return token
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
+        // JWT의 role을 세션에 전파
+        session.user.role = token.role as 'admin' | 'user'
       }
       return session
     },

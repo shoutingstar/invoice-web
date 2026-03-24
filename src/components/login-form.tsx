@@ -65,6 +65,21 @@ export function LoginForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {/* 테스트 계정 안내 */}
+        <div className="mb-6 rounded-lg bg-blue-50 p-3 text-xs dark:bg-blue-950">
+          <p className="mb-2 font-semibold text-blue-900 dark:text-blue-100">
+            🧪 테스트 계정
+          </p>
+          <div className="space-y-1 text-blue-800 dark:text-blue-200">
+            <p>
+              <strong>관리자:</strong> test@example.com / password123
+            </p>
+            <p>
+              <strong>클라이언트:</strong> client@example.com / password123
+            </p>
+          </div>
+        </div>
+
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (

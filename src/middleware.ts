@@ -10,6 +10,15 @@ export default auth(req => {
     req.nextUrl.pathname.startsWith('/login') ||
     req.nextUrl.pathname.startsWith('/signup')
 
+  // 역할 기반 라우트 보호
+  const isAdminRoute = req.nextUrl.pathname.startsWith('/admin')
+  const userRole = req.auth?.user?.role
+
+  // 관리자 전용 라우트 접근 제어
+  if (isAdminRoute && isLoggedIn && userRole !== 'admin') {
+    return Response.redirect(new URL(ROUTES.DASHBOARD, req.nextUrl))
+  }
+
   // 보호된 라우트 접근 시 미인증이면 로그인 페이지로
   if (isProtected && !isLoggedIn) {
     return Response.redirect(new URL(ROUTES.LOGIN, req.nextUrl))
