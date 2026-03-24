@@ -8,7 +8,6 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Container } from '@/components/layout/container'
 import { InvoiceDetail } from '@/components/invoices/invoice-detail'
-import { SharePdfButton } from '@/components/invoices/share-pdf-button'
 import { verifyShareToken } from '@/lib/share-token'
 import { fetchInvoiceById } from '@/lib/api/notion-invoices'
 import { env } from '@/lib/env'
@@ -73,15 +72,11 @@ export default async function SharePage({
   return (
     <Container size="md" className="py-8">
       {/* 공유 링크 안내 */}
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">{invoice.invoiceNumber}</h1>
-          <p className="text-muted-foreground mt-1 text-xs">
-            공유된 견적서입니다.
-          </p>
-        </div>
-        {/* PDF 다운로드 버튼 - Client Component */}
-        <SharePdfButton invoiceNumber={invoice.invoiceNumber} />
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold">{invoice.invoiceNumber}</h1>
+        <p className="text-muted-foreground mt-1 text-xs">
+          공유된 견적서입니다.
+        </p>
       </div>
 
       {/* 견적서 상세 내용 */}

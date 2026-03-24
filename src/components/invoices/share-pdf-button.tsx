@@ -39,6 +39,38 @@ export function SharePdfButton({ invoiceNumber }: SharePdfButtonProps) {
       }
       console.log('✅ html2pdf 라이브러리 로드됨')
 
+      // 렌더링할 요소의 클론 생성
+      const clonedElement = element.cloneNode(true) as HTMLElement
+
+      // Tailwind CSS v4의 lab()/light-dark() 색상 함수 지원 문제 해결
+      // 모든 <style> 태그를 제거하여 Tailwind 스타일이 적용되지 않도록 함
+      const styleTags = clonedElement.querySelectorAll('style')
+      styleTags.forEach(tag => tag.remove())
+
+      // <head>의 style도 제거 (없을 수도 있지만 안전을 위해)
+      const headInClone = clonedElement.querySelector('head')
+      if (headInClone) {
+        const headStyles = headInClone.querySelectorAll('style')
+        headStyles.forEach(tag => tag.remove())
+      }
+
+      // 클래스 제거 (Tailwind 클래스에 lab() 함수 포함 가능)
+      const allElements = clonedElement.querySelectorAll('*')
+      allElements.forEach((el: Element) => {
+        // SVGElement 등 특수 요소는 className이 읽기 전용일 수 있음
+        try {
+          if (el instanceof HTMLElement) {
+            el.className = ''
+            // 위험한 스타일 속성 제거
+            if (el.style.cssText && el.style.cssText.includes('lab')) {
+              el.style.cssText = ''
+            }
+          }
+        } catch {
+          // 클래스 설정 실패 무시
+        }
+      })
+
       const opt = {
         margin: 10,
         filename: `${invoiceNumber}.pdf`,
@@ -48,6 +80,7 @@ export function SharePdfButton({ invoiceNumber }: SharePdfButtonProps) {
           allowTaint: true,
           useCORS: true,
           logging: false,
+          backgroundColor: '#ffffff',
         },
         jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' },
       }
@@ -55,7 +88,8 @@ export function SharePdfButton({ invoiceNumber }: SharePdfButtonProps) {
       console.log('⏳ PDF 생성 중...')
 
       // html2pdf는 체인 가능한 API 제공
-      await html2pdfLib().set(opt).from(element).save()
+      // 정제된 클론 요소를 사용해서 렌더링
+      await html2pdfLib().set(opt).from(clonedElement).save()
 
       console.log('✅ PDF 다운로드 완료')
       alert('PDF가 다운로드되었습니다!')
