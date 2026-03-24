@@ -8,6 +8,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Container } from '@/components/layout/container'
 import { InvoiceDetail } from '@/components/invoices/invoice-detail'
+import { SharePdfButton } from '@/components/invoices/share-pdf-button'
 import { verifyShareToken } from '@/lib/share-token'
 import { fetchInvoiceById } from '@/lib/api/notion-invoices'
 import { env } from '@/lib/env'
@@ -79,28 +80,8 @@ export default async function SharePage({
             공유된 견적서입니다.
           </p>
         </div>
-        {/* PDF 다운로드 버튼 */}
-        <button
-          onClick={() => {
-            const element = document.getElementById('invoice-detail-container')
-            if (element) {
-              const opt = {
-                margin: 10,
-                filename: `${invoice.invoiceNumber}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' },
-              }
-              // html2pdf.js 글로벌 변수 사용
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              const htmlToPdf = (window as any).html2pdf
-              htmlToPdf().set(opt).from(element).save()
-            }
-          }}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors"
-        >
-          📥 PDF 다운로드
-        </button>
+        {/* PDF 다운로드 버튼 - Client Component */}
+        <SharePdfButton invoiceNumber={invoice.invoiceNumber} />
       </div>
 
       {/* 견적서 상세 내용 */}
