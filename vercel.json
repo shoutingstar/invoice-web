@@ -2,22 +2,5 @@
   "buildCommand": "npm run build",
   "framework": "nextjs",
   "installCommand": "npm install",
-  "outputDirectory": ".next",
-  "env": {
-    "NOTION_API_KEY": {
-      "description": "Notion API 인증 토큰 (https://notion.so/my-integrations에서 생성)"
-    },
-    "NOTION_DATABASE_ID": {
-      "description": "Notion 견적서 DB ID (DB URL에서 추출, 예: 3290c100-3d2e-80e2-a7b3-d8ad3c344811)"
-    },
-    "AUTH_SECRET": {
-      "description": "NextAuth.js JWT 서명 비밀키 (openssl rand -base64 32로 생성)"
-    },
-    "AUTH_TEST_EMAIL": {
-      "description": "테스트 로그인 이메일 (개발/스테이징 환경용)"
-    },
-    "AUTH_TEST_PASSWORD": {
-      "description": "테스트 로그인 비밀번호 (개발/스테이징 환경용)"
-    }
-  }
+  "outputDirectory": ".next"
 }
