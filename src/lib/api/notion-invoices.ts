@@ -33,25 +33,30 @@ async function queryNotionDatabase(
   console.log('🔍 Notion API 요청:', {
     original: databaseId,
     normalized: normalizedId,
-    url: `https://api.notion.com/v1/databases/${normalizedId}/query`
+    url: `https://api.notion.com/v1/databases/${normalizedId}/query`,
   })
-  const response = await fetch('https://api.notion.com/v1/databases/' + normalizedId + '/query', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + env.NOTION_API_KEY,
-      'Notion-Version': '2022-06-28',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      filter,
-      sorts,
-      page_size: 100,
-    }),
-  })
+  const response = await fetch(
+    'https://api.notion.com/v1/databases/' + normalizedId + '/query',
+    {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + env.NOTION_API_KEY,
+        'Notion-Version': '2022-06-28',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        filter,
+        sorts,
+        page_size: 100,
+      }),
+    }
+  )
 
   if (!response.ok) {
     const errorData = await response.json()
-    throw new Error(`Notion API 에러: ${response.status} - ${errorData.message || '알 수 없는 에러'}`)
+    throw new Error(
+      `Notion API 에러: ${response.status} - ${errorData.message || '알 수 없는 에러'}`
+    )
   }
 
   const data = await response.json()
@@ -78,12 +83,12 @@ export async function fetchInvoices(options?: {
     // Notion 필터 구성
     const filters: any[] = []
 
-    // 상태 필터
+    // 상태 필터 (select 또는 rich_text로 처리)
     if (status) {
       filters.push({
         property: '상태',
-        select: {
-          equals: status,
+        rich_text: {
+          contains: status,
         },
       })
     }
@@ -170,9 +175,10 @@ export async function fetchInvoices(options?: {
     }
     if (search) {
       const searchLower = search.toLowerCase()
-      filtered = filtered.filter(inv =>
-        inv.invoiceNumber.toLowerCase().includes(searchLower) ||
-        inv.customerName.toLowerCase().includes(searchLower)
+      filtered = filtered.filter(
+        inv =>
+          inv.invoiceNumber.toLowerCase().includes(searchLower) ||
+          inv.customerName.toLowerCase().includes(searchLower)
       )
     }
 
@@ -205,7 +211,7 @@ export async function fetchInvoiceById(id: string): Promise<Invoice | null> {
     const response = await fetch('https://api.notion.com/v1/pages/' + id, {
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer ' + env.NOTION_API_KEY,
+        Authorization: 'Bearer ' + env.NOTION_API_KEY,
         'Notion-Version': '2022-06-28',
       },
     })

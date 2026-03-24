@@ -160,12 +160,12 @@ Notion API 쿼리 (필터 적용)
 
 ### Notion API 필터 구조
 
-**단일 필터**:
+**상태 필터** (rich_text 타입으로 처리):
 
 ```json
 {
   "property": "상태",
-  "select": { "equals": "대기" }
+  "rich_text": { "contains": "대기" }
 }
 ```
 
@@ -180,12 +180,12 @@ Notion API 쿼리 (필터 적용)
 }
 ```
 
-**최종 필터 (AND)**:
+**최종 필터 (AND)** - 검색 + 상태 필터 조합:
 
 ```json
 {
   "and": [
-    { "property": "상태", "select": { "equals": "대시" } },
+    { "property": "상태", "rich_text": { "contains": "대기" } },
     {
       "or": [
         { "property": "고객사명", "rich_text": { "contains": "LX" } },
