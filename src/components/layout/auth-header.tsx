@@ -1,15 +1,13 @@
 /**
  * 인증 영역(auth) 전용 헤더
+ * 사이드바가 로고/네비게이션을 담당하므로, 헤더는 사용자 정보 및 액션 버튼 표시
  * Server Component에서 세션을 읽고 LogoutButton, ThemeToggle만 Client Component로 분리
  */
 
-import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { LogoutButton } from '@/components/layout/logout-button'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { LayoutDashboard, ChevronRight, FileText } from 'lucide-react'
-import { ROUTES } from '@/lib/constants'
 import { auth } from '@/auth'
 
 export async function AuthHeader() {
@@ -23,43 +21,15 @@ export async function AuthHeader() {
 
   return (
     <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 border-b backdrop-blur print:hidden">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6">
         <div className="flex h-14 items-center justify-between">
-          {/* 왼쪽: 로고 + 네비게이션 */}
-          <div className="flex items-center gap-1">
-            {/* 로고 링크 */}
-            <Link
-              href={ROUTES.DASHBOARD}
-              className="hover:bg-accent focus-visible:ring-ring flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors focus-visible:ring-2 focus-visible:outline-none"
-              aria-label="대시보드로 이동"
-            >
-              {/* 로고 아이콘: bg-primary로 테마 연동 */}
-              <div className="bg-primary flex h-7 w-7 items-center justify-center rounded-md">
-                <LayoutDashboard
-                  className="text-primary-foreground h-4 w-4"
-                  aria-hidden="true"
-                />
-              </div>
-              <span className="hidden text-sm font-semibold sm:inline">
-                Invoice Web
-              </span>
-            </Link>
-
-            {/* 구분자 */}
-            <ChevronRight
-              className="text-muted-foreground hidden h-4 w-4 sm:block"
-              aria-hidden="true"
-            />
-
-            {/* 견적서 목록 네비게이션 링크 */}
-            <Link
-              href={ROUTES.INVOICES}
-              className="text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring hidden items-center gap-1.5 rounded-md px-2 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-none sm:flex"
-            >
-              <FileText className="h-3.5 w-3.5" aria-hidden="true" />
-              견적서
-            </Link>
+          {/* 왼쪽: 모바일 전용 서비스명 (md 미만에서만 표시, 사이드바가 없는 화면) */}
+          <div className="flex items-center gap-2 md:hidden">
+            <span className="text-sm font-semibold">Invoice Web</span>
           </div>
+
+          {/* md 이상에서 왼쪽 영역은 비움 (사이드바가 로고/네비게이션 담당) */}
+          <div className="hidden md:block" aria-hidden="true" />
 
           {/* 오른쪽: 사용자 정보 + ThemeToggle + 로그아웃 */}
           <div className="flex items-center gap-2">
