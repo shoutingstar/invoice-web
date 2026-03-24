@@ -41,8 +41,13 @@ test.describe('Phase 5 Task 018 - 공유 링크', () => {
         response.request().method() === 'POST'
     )
 
+    // 공유 드롭다운 버튼 클릭
     const shareBtn = page.locator('button', { hasText: '공유' })
     await shareBtn.click()
+
+    // 드롭다운에서 "링크 복사" 항목 클릭
+    const copyLink = page.locator('[role="menuitem"]:has-text("링크 복사")')
+    await copyLink.click()
 
     const response = await responsePromise
     expect(response.status()).toBe(200)
@@ -65,8 +70,13 @@ test.describe('Phase 5 Task 018 - 공유 링크', () => {
       }
     })
 
+    // 공유 드롭다운 버튼 클릭
     const shareBtn = page.locator('button', { hasText: '공유' })
     await shareBtn.click()
+
+    // 드롭다운에서 "링크 복사" 항목 클릭
+    const copyLink = page.locator('[role="menuitem"]:has-text("링크 복사")')
+    await copyLink.click()
 
     // 토스트 알림 대기 (공유 성공 후 표시됨)
     await page.waitForTimeout(1500)
@@ -91,8 +101,14 @@ test.describe('Phase 5 Task 018 - 공유 링크', () => {
       }
     })
 
+    // 공유 드롭다운 버튼 클릭
     const shareBtn = page.locator('button', { hasText: '공유' })
     await shareBtn.click()
+
+    // 드롭다운에서 "링크 복사" 항목 클릭
+    const copyLink = page.locator('[role="menuitem"]:has-text("링크 복사")')
+    await copyLink.click()
+
     await page.waitForTimeout(1500)
 
     // shareUrl이 생성되었는지 확인
@@ -115,8 +131,8 @@ test.describe('Phase 5 Task 018 - 공유 링크', () => {
     expect(page.url()).toContain('/share/')
 
     // 견적서 번호 또는 공유 안내 텍스트 확인
-    const content = page.locator('main')
-    await expect(content).toBeVisible()
+    const invoiceNumber = page.locator('h1')
+    await expect(invoiceNumber).toBeVisible()
   })
 
   test('T5: 위조 토큰으로 접근 시 404 페이지 표시', async ({ page }) => {

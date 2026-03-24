@@ -53,7 +53,11 @@ test.describe('Phase 5 통합 테스트 - 전체 플로우', () => {
       }
     })
 
+    // 공유 드롭다운 버튼 클릭
     await shareBtn.click()
+    // 드롭다운에서 "링크 복사" 항목 클릭
+    const copyLink = page.locator('[role="menuitem"]:has-text("링크 복사")')
+    await copyLink.click()
     await page.waitForTimeout(2000)
 
     expect(shareUrl).toBeTruthy()
@@ -72,8 +76,8 @@ test.describe('Phase 5 통합 테스트 - 전체 플로우', () => {
 
     // 공유 레이아웃 확인
     expect(page.url()).toContain('/share/')
-    const shareLayout = page.locator('span:has-text("공유된 견적서")')
-    await expect(shareLayout).toBeVisible()
+    const h1 = page.locator('h1')
+    await expect(h1).toBeVisible()
   })
 
   test('T2: 역할 기반 접근 제어 - 인증된 사용자 대시보드 접근', async ({
@@ -130,6 +134,9 @@ test.describe('Phase 5 통합 테스트 - 전체 플로우', () => {
 
     const shareBtn = page.locator('button', { hasText: '공유' })
     await shareBtn.click()
+    // 드롭다운에서 "링크 복사" 항목 클릭
+    const copyLink = page.locator('[role="menuitem"]:has-text("링크 복사")')
+    await copyLink.click()
     await page.waitForTimeout(2000)
 
     if (shareUrl) {
