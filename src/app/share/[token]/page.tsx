@@ -72,15 +72,41 @@ export default async function SharePage({
   return (
     <Container size="md" className="py-8">
       {/* 공유 링크 안내 */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold">{invoice.invoiceNumber}</h1>
-        <p className="text-muted-foreground mt-1 text-sm">
-          공유된 견적서입니다. PDF 다운로드는 로그인 후 이용 가능합니다.
-        </p>
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">{invoice.invoiceNumber}</h1>
+          <p className="text-muted-foreground mt-1 text-xs">
+            공유된 견적서입니다.
+          </p>
+        </div>
+        {/* PDF 다운로드 버튼 */}
+        <button
+          onClick={() => {
+            const element = document.getElementById('invoice-detail-container')
+            if (element) {
+              const opt = {
+                margin: 10,
+                filename: `${invoice.invoiceNumber}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' },
+              }
+              // html2pdf.js 글로벌 변수 사용
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const htmlToPdf = (window as any).html2pdf
+              htmlToPdf().set(opt).from(element).save()
+            }
+          }}
+          className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors"
+        >
+          📥 PDF 다운로드
+        </button>
       </div>
 
-      {/* 견적서 상세 내용 (PDF 버튼 없이 표시) */}
-      <InvoiceDetail invoice={invoice} />
+      {/* 견적서 상세 내용 */}
+      <div id="invoice-detail-container">
+        <InvoiceDetail invoice={invoice} />
+      </div>
     </Container>
   )
 }
