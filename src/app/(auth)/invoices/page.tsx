@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { Container } from '@/components/layout/container'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -7,6 +8,11 @@ import { EmptyState } from '@/components/invoices/empty-state'
 import { fetchInvoices } from '@/lib/api/notion-invoices'
 import { PAGINATION, ROUTES } from '@/lib/constants'
 import type { InvoiceStatus } from '@/lib/types/invoice'
+
+export const metadata: Metadata = {
+  title: '견적서 목록 | Invoice Web',
+  description: '전체 견적서를 검색하고 관리합니다.',
+}
 
 interface InvoicesPageProps {
   searchParams: Promise<{
@@ -66,7 +72,7 @@ export default async function InvoicesPage({
 
       {/* 에러 표시 */}
       {error && (
-        <section className="mb-6">
+        <section className="mb-6" aria-live="polite" role="alert">
           <div className="border-destructive/50 bg-destructive/10 rounded-lg border p-4">
             <p className="text-destructive text-sm">
               <strong>오류:</strong> {error}
@@ -79,17 +85,23 @@ export default async function InvoicesPage({
       )}
 
       {/* 견적서 카드 그리드 또는 EmptyState */}
-      <section className="mb-6">
+      <section className="mb-6" aria-label="견적서 목록">
         {result.invoices.length > 0 ? (
           <>
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground text-sm" aria-live="polite">
                 총 {result.total}건 (페이지 {result.page} / {totalPages})
               </p>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div
+              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+              role="list"
+              aria-label={`견적서 ${result.invoices.length}건`}
+            >
               {result.invoices.map(invoice => (
-                <InvoiceCard key={invoice.id} invoice={invoice} />
+                <div key={invoice.id} role="listitem">
+                  <InvoiceCard invoice={invoice} />
+                </div>
               ))}
             </div>
           </>
@@ -108,13 +120,17 @@ export default async function InvoicesPage({
 
       {/* 페이지네이션 */}
       {result.invoices.length > 0 && totalPages > 1 && (
-        <section>
-          <div className="flex items-center justify-center gap-2">
+        <section aria-label="페이지 탐색">
+          <nav
+            aria-label={`총 ${totalPages}페이지 중 현재 ${page}페이지`}
+            className="flex items-center justify-center gap-2"
+          >
             <Button
               variant="outline"
               size="icon"
               disabled={page === 1}
               asChild={page > 1}
+              aria-label="이전 페이지로 이동"
             >
               {page > 1 ? (
                 <a
@@ -124,18 +140,18 @@ export default async function InvoicesPage({
                     page: String(page - 1),
                   }).toString()}`}
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-4 w-4" aria-hidden="true" />
                   <span className="sr-only">이전 페이지</span>
                 </a>
               ) : (
                 <>
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-4 w-4" aria-hidden="true" />
                   <span className="sr-only">이전 페이지</span>
                 </>
               )}
             </Button>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1" role="list">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                 pageNum => (
                   <Button
@@ -143,11 +159,14 @@ export default async function InvoicesPage({
                     variant={page === pageNum ? 'default' : 'outline'}
                     size="sm"
                     asChild={page !== pageNum}
+                    aria-label={`${pageNum}페이지로 이동`}
+                    aria-current={page === pageNum ? 'page' : undefined}
                   >
                     {page === pageNum ? (
-                      <span>{pageNum}</span>
+                      <span role="listitem">{pageNum}</span>
                     ) : (
                       <a
+                        role="listitem"
                         href={`/invoices?${new URLSearchParams({
                           ...(search && { search }),
                           ...(status && { status }),
@@ -167,6 +186,7 @@ export default async function InvoicesPage({
               size="icon"
               disabled={page === totalPages}
               asChild={page < totalPages}
+              aria-label="다음 페이지로 이동"
             >
               {page < totalPages ? (
                 <a
@@ -176,17 +196,17 @@ export default async function InvoicesPage({
                     page: String(page + 1),
                   }).toString()}`}
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-4 w-4" aria-hidden="true" />
                   <span className="sr-only">다음 페이지</span>
                 </a>
               ) : (
                 <>
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-4 w-4" aria-hidden="true" />
                   <span className="sr-only">다음 페이지</span>
                 </>
               )}
             </Button>
-          </div>
+          </nav>
         </section>
       )}
     </Container>

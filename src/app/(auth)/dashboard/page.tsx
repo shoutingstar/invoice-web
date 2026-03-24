@@ -1,6 +1,12 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { auth } from '@/auth'
 import { Container } from '@/components/layout/container'
+
+export const metadata: Metadata = {
+  title: '대시보드 | Invoice Web',
+  description: '견적서 현황과 최근 견적서를 확인합니다.',
+}
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {

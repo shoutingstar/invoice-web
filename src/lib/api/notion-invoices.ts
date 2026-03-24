@@ -52,9 +52,13 @@ export async function fetchInvoices(options?: {
         }
       : undefined
 
-    const results = await queryNotionDatabase(env.NOTION_DATABASE_ID, filter, [
-      { property: '작성 날짜', direction: 'descending' },
-    ])
+    // 목록 조회: 1시간(3600초) 캐시 적용
+    const results = await queryNotionDatabase(
+      env.NOTION_DATABASE_ID,
+      filter,
+      [{ property: '작성 날짜', direction: 'descending' }],
+      3600
+    )
 
     // 항목 조회 (includeItems가 true일 때만)
     const invoices = await Promise.all(
@@ -146,13 +150,14 @@ export async function fetchInvoiceById(id: string): Promise<Invoice | null> {
       throw new Error('NOTION_API_KEY 환경변수가 설정되지 않았습니다.')
     }
 
-    // Notion 페이지 조회
+    // Notion 페이지 조회: 24시간(86400초) 캐시 적용 (상세 데이터는 변경 빈도 낮음)
     const response = await fetch('https://api.notion.com/v1/pages/' + id, {
       method: 'GET',
       headers: {
         Authorization: 'Bearer ' + env.NOTION_API_KEY,
         'Notion-Version': '2022-06-28',
       },
+      next: { revalidate: 86400, tags: [`notion-invoice-${id}`] },
     })
 
     if (!response.ok) {

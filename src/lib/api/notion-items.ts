@@ -36,10 +36,12 @@ export async function fetchInvoiceItems(invoiceId: string): Promise<any[]> {
     //   relation: { contains: invoiceId },
     // }
     // 현재는 필터 없이 모든 items를 조회합니다.
+    // 항목 조회: 24시간(86400초) 캐시 적용
     const results = await queryNotionDatabase(
       env.NOTION_ITEMS_DATABASE_ID,
       undefined,
-      [{ property: '순서', direction: 'ascending' }]
+      [{ property: '순서', direction: 'ascending' }],
+      86400
     )
 
     // 각 항목을 객체로 변환 (CSV 필드명 기반)

@@ -74,27 +74,48 @@ export function InvoiceFilter({
   }, [router])
 
   return (
-    <div className="border-border bg-card space-y-4 rounded-lg border p-4">
+    <div
+      className="border-border bg-card space-y-4 rounded-lg border p-4"
+      role="search"
+      aria-label="견적서 검색 및 필터"
+    >
       <div className="flex gap-3">
         <div className="flex-1">
+          <label htmlFor="invoice-search" className="sr-only">
+            견적서 검색
+          </label>
           <Input
+            id="invoice-search"
             placeholder="견적서 번호 또는 고객사명 검색..."
             value={search}
             onChange={e => setSearch(e.target.value)}
             onKeyDown={e => {
               if (e.key === 'Enter') handleSearch()
             }}
+            aria-label="견적서 번호 또는 고객사명으로 검색"
           />
         </div>
-        <Button onClick={handleSearch} size="icon" variant="default">
-          <Search className="h-4 w-4" />
+        <Button
+          onClick={handleSearch}
+          size="icon"
+          variant="default"
+          aria-label="검색 실행"
+        >
+          <Search className="h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
 
       <div className="flex gap-3">
         <div className="flex-1">
-          <Select value={status || 'all'} onValueChange={handleStatusChange}>
-            <SelectTrigger>
+          <label htmlFor="invoice-status-filter" className="sr-only">
+            상태 필터
+          </label>
+          <Select
+            value={status || 'all'}
+            onValueChange={handleStatusChange}
+            name="invoice-status-filter"
+          >
+            <SelectTrigger aria-label="견적서 상태 필터 선택">
               <SelectValue placeholder="상태 선택" />
             </SelectTrigger>
             <SelectContent>
@@ -107,7 +128,11 @@ export function InvoiceFilter({
           </Select>
         </div>
         {(search || status) && (
-          <Button onClick={handleReset} variant="outline">
+          <Button
+            onClick={handleReset}
+            variant="outline"
+            aria-label="검색 및 필터 초기화"
+          >
             초기화
           </Button>
         )}

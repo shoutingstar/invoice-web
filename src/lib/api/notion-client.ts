@@ -37,17 +37,25 @@ export function normalizeNotionId(id: string): string {
  * @param databaseId Notion 데이터베이스 ID
  * @param filter Notion 필터 객체
  * @param sorts 정렬 기준 배열
+ * @param revalidate 캐시 재검증 주기(초). 기본값 3600초(1시간). 0이면 no-store
  */
 export async function queryNotionDatabase(
   databaseId: string,
   filter?: any,
-  sorts?: any[]
+  sorts?: any[],
+  revalidate: number = 3600
 ): Promise<any[]> {
   if (!env.NOTION_API_KEY) {
     throw new Error('NOTION_API_KEY 환경변수가 설정되지 않았습니다.')
   }
 
   const normalizedId = normalizeNotionId(databaseId)
+
+  // Next.js fetch 캐싱: revalidate 옵션으로 ISR 캐싱 적용
+  const cacheOption =
+    revalidate === 0
+      ? { cache: 'no-store' as const }
+      : { next: { revalidate, tags: [`notion-db-${normalizedId}`] } }
 
   const response = await fetch(
     'https://api.notion.com/v1/databases/' + normalizedId + '/query',
@@ -63,6 +71,7 @@ export async function queryNotionDatabase(
         sorts,
         page_size: 100,
       }),
+      ...cacheOption,
     }
   )
 

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Container } from '@/components/layout/container'
@@ -8,6 +9,29 @@ import { PDFDownloadButton } from '@/components/invoices/pdf-download-button'
 import { fetchInvoiceById } from '@/lib/api/notion-invoices'
 import { ROUTES } from '@/lib/constants'
 
+/**
+ * 동적 메타데이터: 견적서 번호와 고객사명을 title에 반영
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const { id } = await params
+  const invoice = await fetchInvoiceById(id)
+
+  if (!invoice) {
+    return {
+      title: '견적서를 찾을 수 없음 | Invoice Web',
+    }
+  }
+
+  return {
+    title: `${invoice.invoiceNumber} - ${invoice.customerName} | Invoice Web`,
+    description: `${invoice.customerName} 견적서 상세 정보 및 PDF 다운로드`,
+  }
+}
+
 export default async function InvoiceDetailPage({
   params,
 }: {
@@ -16,7 +40,7 @@ export default async function InvoiceDetailPage({
   // Next.js 15에서 params는 Promise로 처리
   const { id } = await params
 
-  // Notion API에서 견적서 조회
+  // Notion API에서 견적서 조회 (generateMetadata와 캐시 공유)
   const invoice = await fetchInvoiceById(id)
 
   // 존재하지 않으면 404 페이지로
