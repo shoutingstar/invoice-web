@@ -2,5 +2,18 @@
   "buildCommand": "npm run build",
   "framework": "nextjs",
   "installCommand": "npm install",
-  "outputDirectory": ".next"
+  "outputDirectory": ".next",
+  "functions": {
+    "src/app/api/invoices/[id]/pdf/route.ts": {
+      "memory": 3008,
+      "maxDuration": 60
+    },
+    "src/app/api/share/[token]/pdf/route.ts": {
+      "memory": 3008,
+      "maxDuration": 60
+    }
+  },
+  "env": {
+    "CHROMIUM_BIN": "/tmp/chromium"
+  }
 }

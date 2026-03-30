@@ -326,10 +326,13 @@ async function generatePdf(html: string): Promise<Buffer> {
       const chromiumModule = await import('@sparticuz/chromium')
       const chromium = chromiumModule.default
 
-      const executablePath = await chromium.executablePath()
+      // CDN URL 명시적 지정 및 /tmp 캐싱
+      const executablePath = await chromium.executablePath(
+        'https://github.com/Sparticuz/chromium/releases/download/v132.0.0/chromium-v132.0.0-pack.tar'
+      )
 
       launchOptions = {
-        args: chromium.args || [],
+        args: [...(chromium.args || []), '--disable-dev-shm-usage'],
         defaultViewport: null,
         executablePath,
         headless: true,
