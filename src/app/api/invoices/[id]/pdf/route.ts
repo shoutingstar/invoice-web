@@ -93,13 +93,15 @@ function generatePdfHtml(invoice: Invoice): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${invoice.invoiceNumber} - 견적서</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap');
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: white;
       color: #000;
       line-height: 1.6;
