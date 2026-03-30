@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import puppeteer from 'puppeteer'
 import { verifyShareToken } from '@/lib/share-token'
 import { fetchInvoiceById } from '@/lib/api/notion-invoices'
 import { env } from '@/lib/env'
@@ -315,15 +314,42 @@ function generatePdfHtml(invoice: Invoice): string {
 }
 
 /**
- * Puppeteer로 PDF 생성
+ * 로컬 & Vercel 환경 모두 지원하는 PDF 생성
+ * 로컬: puppeteer 내장 chromium 사용
+ * Vercel: puppeteer-core + @sparticuz/chromium 사용
  */
 async function generatePdf(html: string): Promise<Buffer> {
   let browser
   try {
-    browser = await puppeteer.launch({
+    // 환경에 따라 다른 puppeteer 모듈 사용
+    let launchOptions: Parameters<typeof import('puppeteer').launch>[0] = {
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    })
+    }
+
+    if (process.env.VERCEL) {
+      // Vercel 환경: puppeteer-core + @sparticuz/chromium
+      const puppeteerCore = await import('puppeteer-core')
+      const chromiumModule = await import('@sparticuz/chromium')
+      const chromium = chromiumModule.default
+
+      const executablePath = await chromium.executablePath()
+
+      launchOptions = {
+        args: chromium.args || [],
+        defaultViewport: null,
+        executablePath,
+        headless: true,
+      }
+
+      browser = await puppeteerCore.launch(launchOptions)
+    } else {
+      // 로컬 환경: 기본 puppeteer 사용
+      const puppeteerModule = await import('puppeteer')
+      launchOptions = {
+        headless: true,
+      }
+      browser = await puppeteerModule.default.launch(launchOptions)
+    }
 
     const page = await browser.newPage()
 

@@ -63,6 +63,12 @@ test('견적서 상세 페이지에서 PDF 다운로드 API 작동 확인', asyn
     `${BASE_URL}/api/invoices/${invoiceId}/pdf`
   )
 
+  console.log(`📊 API 응답 상태: ${pdfResponse.status()}`)
+  if (!pdfResponse.ok()) {
+    const errorText = await pdfResponse.text()
+    console.error('❌ API 에러:', errorText)
+  }
+
   expect(pdfResponse.ok()).toBe(true)
   console.log(`✅ API 응답: ${pdfResponse.status()}`)
 
